@@ -58,6 +58,8 @@ public:
      */
     int spin();
 
+    void draw();
+
     // Overloaded print operator
     friend ostream& operator << (ostream& outs, Wheel& rhs);
 };
