@@ -77,7 +77,7 @@ int Wheel::spin() {
 }
 
 void Wheel::draw() {
-    
+
 }
 
 ostream& operator << (ostream& outs, Wheel& rhs) {
