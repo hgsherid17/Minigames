@@ -6,7 +6,9 @@
 #include "Wheel.h"
 
 using namespace std;
+
 GLdouble width, height;
+
 int wd;
 
 void initWheel() {

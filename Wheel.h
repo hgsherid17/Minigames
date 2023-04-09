@@ -5,6 +5,7 @@
 #ifndef M1OEP_HGSHERID_WHEEL_H
 #define M1OEP_HGSHERID_WHEEL_H
 
+#include "shape.h"
 #include <iostream>
 #include <vector>
 
@@ -57,8 +58,6 @@ public:
      * @return
      */
     int spin();
-
-    void draw();
 
     // Overloaded print operator
     friend ostream& operator << (ostream& outs, Wheel& rhs);

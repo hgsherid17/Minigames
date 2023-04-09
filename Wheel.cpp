@@ -76,10 +76,6 @@ int Wheel::spin() {
 
 }
 
-void Wheel::draw() {
-
-}
-
 ostream& operator << (ostream& outs, Wheel& rhs) {
     int lastWedge;
     for (int i = 0; i < rhs.getSize(); ++i) {
