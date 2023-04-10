@@ -6,19 +6,20 @@
 #include "circle.h"
 #include "shape.h"
 
-
-
 using namespace std;
 
 GLdouble width, height;
 Circle wheel;
+float rotationAngle = 0.0f;
 
-const color red(1, 0, 0, 1);
-const color yellow(1, 1, 0, 1);
-const color green(0, 1, 0, 1);
-const color blue(0, 0, 1, 1);
+bool spinning = false;
 
-vector<color> wedgeColors = {red, yellow, green, blue};
+const color dustyRose(0.52, 0.39, 0.39, 1);
+const color oldGold(0.81, 0.71, 0.23, 1);
+const color seaGreen(0.137255, 0.556863, 0.419608, 1);
+const color steelBlue(0.560784, 0.560784, 0.737255, 1);
+
+vector<color> wedgeColors = {dustyRose, oldGold, seaGreen, steelBlue};
 
 int wd;
 
@@ -27,6 +28,7 @@ void initWheel() {
     wheel.setRadius(200);
     wheel.setColor(0, 0, 0, 1);
 }
+
 void initPlayer() {
 
 }
@@ -42,6 +44,19 @@ void initGL() {
     glClearColor(0.0f, 1.0f, 1.0f, 0.0f);
 }
 
+void spinWheel(int val) {
+    /**
+     * TODO: Pass in target index and slow rotation angle as it reaches target
+     */
+    wheel.spin(rotationAngle);
+    rotationAngle += 1.0f;
+
+    if (rotationAngle > 360) {
+        rotationAngle -= 360;
+    }
+
+    glutPostRedisplay();
+}
 void display() {
     /** Code from Runner GP **/
 
@@ -60,9 +75,21 @@ void display() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // DO NOT CHANGE THIS LINE
 
     /* Draw here */
-    wheel.draw();
+    if (spinning) {
+        glPushMatrix();
+        glTranslatef(wheel.getCenterX(), wheel.getCenterY(), 0.0f);
+        spinWheel(0);
+        glTranslatef(-(wheel.getCenterX()), -(wheel.getCenterY()), 0.0f);
+        wheel.drawWedges(12, wedgeColors);
+        glPopMatrix();
+    }
+    else {
+        wheel.drawWedges(12, wedgeColors);
+    }
 
-    wheel.drawWedges(12, wedgeColors);
+    //wheel.draw();
+
+    //wheel.drawWedges(12, wedgeColors);
 
     glFlush();
 }
@@ -72,9 +99,17 @@ void kbd(unsigned int key, int x, int y) {
         glutDestroyWindow(wd);
         exit(0);
     }
+    if (key == 's') {
+        spinning = true;
+    }
     glutPostRedisplay();
 }
 void kbdS(int key, int x, int y) {
+    switch(key) {
+        case GLUT_KEY_RIGHT :
+            spinning = true;
+            break;
+    }
     glutPostRedisplay();
 }
 void mouse(int button, int state, int x, int y) {
@@ -97,6 +132,7 @@ int main(int argc, char** argv) {
 
     // Register callback handler for window re-paint event
     glutDisplayFunc(display);
+    glutTimerFunc(25, spinWheel, 0);
 
     // Our own OpenGL initialization
     initGL();

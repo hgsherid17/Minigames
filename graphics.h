@@ -24,6 +24,8 @@ void init();
 
 void initGL();
 
+void spinWheel(int val);
+
 void display();
 
 void kbd(unsigned char key, int x, int y);

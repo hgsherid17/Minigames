@@ -52,6 +52,8 @@ public:
     void draw() const override;
     void drawWedges(int numWedges, vector<color> wedgeColors);
 
+    void spin(float rotationAngle);
+
 };
 
 #endif //M1OEP_HGSHERID_CIRCLE_H

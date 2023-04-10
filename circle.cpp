@@ -132,3 +132,11 @@ void Circle::drawWedges(int numWedges, vector<color> wedgeColors) {
 
 
 }
+
+void Circle::spin(float rotationAngle) {
+
+    // Spin around twice for show lol
+    glRotatef(rotationAngle, 0, 0, 1.0f);
+
+    // Spin to a random chosen index
+}
