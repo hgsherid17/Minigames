@@ -2,6 +2,8 @@
 // Created by Hannah Sheridan on 4/9/23.
 //
 #include "circle.h"
+#include <vector>
+using namespace std;
 
 Circle::Circle() : Shape(), radius(0) {
 }
@@ -100,22 +102,33 @@ void Circle::draw() const {
                    center.y + (radius * sin(i)));
     }
     glEnd();
+}
 
+void Circle::drawWedges(int numWedges, vector<color> wedgeColors) {
     /* Segment wedges */
-    glBegin(GL_LINE_LOOP);
 
-    int wedges = 12;
-    for (int i = 0; i < wedges; ++i) {
-        float start = i * (2.0 * PI) / wedges;
-        float end = (i + 1) * (2.0 * PI) / wedges;
+    int wedgeIndex = 0;
+    for (int i = 0; i < numWedges; ++i) {
+        float start = i * (2.0 * PI) / numWedges;
+        float end = (i + 1) * (2.0 * PI) / numWedges;
 
+        glColor3f(wedgeColors[wedgeIndex].red, wedgeColors[wedgeIndex].green, wedgeColors[wedgeIndex].blue);
+
+        glBegin(GL_TRIANGLE_FAN);
         glVertex2f(center.x, center.y);
         glVertex2f(center.x + radius * cos(start), center.y + radius * sin(start));
         glVertex2f(center.x + radius * cos(end), center.y + radius * sin(end));
+        glEnd();
 
+        if (wedgeIndex == wedgeColors.size() - 1) {
+            wedgeIndex = 0;
+        }
+        else {
+            wedgeIndex++;
+        }
     }
 
 
 
-    glEnd();
+
 }

@@ -6,6 +6,9 @@
 #define M1OEP_HGSHERID_CIRCLE_H
 #include "shape.h"
 #include "graphics.h"
+#include <vector>
+
+using namespace std;
 
 class Circle : public Shape {
 private:
@@ -47,6 +50,7 @@ public:
     void setRadius(double r);
 
     void draw() const override;
+    void drawWedges(int numWedges, vector<color> wedgeColors);
 
 };
 

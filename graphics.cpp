@@ -7,10 +7,18 @@
 #include "shape.h"
 
 
+
 using namespace std;
 
 GLdouble width, height;
 Circle wheel;
+
+const color red(1, 0, 0, 1);
+const color yellow(1, 1, 0, 1);
+const color green(0, 1, 0, 1);
+const color blue(0, 0, 1, 1);
+
+vector<color> wedgeColors = {red, yellow, green, blue};
 
 int wd;
 
@@ -53,6 +61,8 @@ void display() {
 
     /* Draw here */
     wheel.draw();
+
+    wheel.drawWedges(12, wedgeColors);
 
     glFlush();
 }
