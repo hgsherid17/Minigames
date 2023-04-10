@@ -3,16 +3,21 @@
 //
 #include "graphics.h"
 #include <stdlib.h>
-#include "Wheel.h"
+#include "circle.h"
+#include "shape.h"
+
 
 using namespace std;
 
 GLdouble width, height;
+Circle wheel;
 
 int wd;
 
 void initWheel() {
-
+    wheel.setCenter(250, 250);
+    wheel.setRadius(200);
+    wheel.setColor(0, 0, 0, 1);
 }
 void initPlayer() {
 
@@ -21,6 +26,7 @@ void initPlayer() {
 void init() {
     width = 500;
     height = 500;
+    srand(time(NULL));
     initWheel();
     initPlayer();
 }
@@ -46,6 +52,7 @@ void display() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // DO NOT CHANGE THIS LINE
 
     /* Draw here */
+    wheel.draw();
 
     glFlush();
 }

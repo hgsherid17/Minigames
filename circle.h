@@ -5,10 +5,12 @@
 #ifndef M1OEP_HGSHERID_CIRCLE_H
 #define M1OEP_HGSHERID_CIRCLE_H
 #include "shape.h"
+#include "graphics.h"
 
 class Circle : public Shape {
 private:
     double radius;
+
 public:
     /* Constructors */
     Circle();

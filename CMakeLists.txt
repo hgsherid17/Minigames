@@ -22,7 +22,11 @@ file(GLOB SOURCE_FILES
 
 add_executable(graphics
         graphics.cpp
-        graphics.h)
+        graphics.h
+        circle.cpp
+        circle.h
+        shape.cpp
+        shape.h)
 
 if (APPLE)
     target_link_libraries (graphics ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES})

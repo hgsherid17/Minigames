@@ -4,8 +4,8 @@
 #include "circle.h"
 
 Circle::Circle() : Shape(), radius(0) {
-
 }
+
 Circle::Circle(double radius) : Shape() {
     setRadius(radius);
 };
@@ -87,5 +87,35 @@ void Circle::setRadius(double r) {
 }
 
 void Circle::draw() const {
+    glLineWidth(2.0f);
+    glColor3f(fill.red, fill.green, fill.blue);
 
+    /* Outline wheel */
+    glBegin(GL_LINE_LOOP);
+
+    glVertex2i(center.x, center.y);
+
+    for (double i = 0; i < 2.0*PI+0.05; i += (2.0*PI)/360.0) {
+        glVertex2f(center.x + (radius * cos(i)),
+                   center.y + (radius * sin(i)));
+    }
+    glEnd();
+
+    /* Segment wedges */
+    glBegin(GL_LINE_LOOP);
+
+    int wedges = 12;
+    for (int i = 0; i < wedges; ++i) {
+        float start = i * (2.0 * PI) / wedges;
+        float end = (i + 1) * (2.0 * PI) / wedges;
+
+        glVertex2f(center.x, center.y);
+        glVertex2f(center.x + radius * cos(start), center.y + radius * sin(start));
+        glVertex2f(center.x + radius * cos(end), center.y + radius * sin(end));
+
+    }
+
+
+
+    glEnd();
 }

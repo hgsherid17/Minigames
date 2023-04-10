@@ -4,6 +4,7 @@
 
 #ifndef M1OEP_HGSHERID_SHAPE_H
 #define M1OEP_HGSHERID_SHAPE_H
+#include <math.h>
 const double PI = 3.14159265358979323846;
 
 struct color {
