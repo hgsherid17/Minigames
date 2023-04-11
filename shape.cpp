@@ -67,6 +67,12 @@ color Shape::getColor() const {
 point Shape::getPoint() const {
     return center;
 }
+double Shape::getXVelocity() const {
+    return xVelocity;
+}
+double Shape::getYVelocity() const {
+    return yVelocity;
+}
 double Shape::getRed() const {
     return fill.red;
 }
@@ -91,6 +97,16 @@ void Shape::setColor(color c) {
 }
 void Shape::setColor(double r, double g, double b, double a) {
     fill = {r, g, b, a};
+}
+void Shape::setVelocity(double x, double y) {
+    this->xVelocity = x;
+    this->yVelocity = y;
+}
+void Shape::setXVelocity(double x) {
+    this->xVelocity = x;
+}
+void Shape::setYVelocity(double y) {
+    this->yVelocity = y;
 }
 void Shape::setRed(double r) {
     fill.red = r;
@@ -130,3 +146,13 @@ void Shape::moveY(double y) {
     center.y += y;
 }
 
+void Shape::bounceX() {
+    xVelocity *= -1;
+}
+void Shape::bounceY() {
+    yVelocity *= -1;
+}
+void Shape::collide(const Shape &s) {
+
+
+}

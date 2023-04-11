@@ -94,7 +94,7 @@ void Circle::draw() const {
     glColor3f(fill.red, fill.green, fill.blue);
 
     /* Outline wheel */
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_TRIANGLE_FAN);
 
     glVertex2i(center.x, center.y);
 

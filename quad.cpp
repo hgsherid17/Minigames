@@ -61,6 +61,10 @@ double Quad::getBottomY() const {
 }
 
 /* Setters */
+void Quad::setSize(unsigned int w, unsigned int h) {
+    this->width = w;
+    this->height = h;
+}
 void Quad::setWidth(unsigned int w) {
     this->width = w;
 }

@@ -28,6 +28,8 @@ class Shape {
 protected:
     color fill;
     point center;
+    double xVelocity;
+    double yVelocity;
 public:
     Shape();
     Shape(color fill);
@@ -47,6 +49,8 @@ public:
     /* Getters */
     color getColor() const;
     point getPoint() const;
+    double getXVelocity() const;
+    double getYVelocity() const;
     double getRed() const;
     double getGreen() const;
     double getBlue() const;
@@ -61,6 +65,9 @@ public:
     /* Setters */
     void setColor(color c);
     void setColor(double r, double g, double b, double a);
+    void setVelocity(double x, double y);
+    void setXVelocity(double x);
+    void setYVelocity(double y);
     void setRed(double r);
     void setGreen(double g);
     void setBlue(double b);
@@ -73,6 +80,10 @@ public:
     void move(double x, double y);
     void moveX(double x);
     void moveY(double y);
+    void bounceX();
+    void bounceY();
+
+    void collide(const Shape &s);
     virtual void draw() const = 0;
 
 

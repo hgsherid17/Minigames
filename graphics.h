@@ -18,6 +18,7 @@
 #endif
 
 enum Game {
+    WHEEL,
     PONG,
     FLAPPY_BIRD,
     COLORING_BOOK
@@ -25,22 +26,24 @@ enum Game {
 
 void initWheel();
 void initColorBox();
-void initBars();
-void initPlayer();
+void initPongBars();
+void initPongBall();
+void initPlayers();
 
 void init();
 
 void initGL();
 
+void moveBall(int val);
 void spinWheel(int val);
 
 void display();
 
+void mouse(int button, int state, int x, int y);
+
 void kbd(unsigned char key, int x, int y);
 
 void kbdS(int key, int x, int y);
-
-void mouse(int button, int state, int x, int y);
 
 
 

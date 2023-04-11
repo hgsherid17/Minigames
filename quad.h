@@ -40,6 +40,7 @@ public:
     double getBottomY() const override;
 
     /* Setters */
+    void setSize(unsigned int w, unsigned int h);
     void setWidth(unsigned int w);
     void setHeight(unsigned int h);
 

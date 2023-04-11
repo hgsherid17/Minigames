@@ -13,6 +13,7 @@ GLdouble width, height;
 Circle wheel;
 Quad leftBar;
 Quad rightBar;
+Circle ball;
 Quad colorBox;
 float rotationAngle = 0.0f;
 
@@ -37,23 +38,26 @@ void initWheel() {
 
 void initColorBox() {
     colorBox.setCenter(250, 250);
-    colorBox.setWidth(100);
-    colorBox.setHeight(100);
+    colorBox.setSize(100, 100);
     colorBox.setColor(seaGreen);
 }
 /* Pong */
-void initBars() {
+void initPongBars() {
     leftBar.setCenter(20, 250);
     rightBar.setCenter(480, 250);
     leftBar.setColor(white);
     rightBar.setColor(white);
-    leftBar.setWidth(10);
-    leftBar.setHeight(70);
-    rightBar.setWidth(10);
-    rightBar.setHeight(70);
+    leftBar.setSize(10, 70);
+    rightBar.setSize(10, 70);
+}
+void initPongBall() {
+    ball.setColor(white);
+    ball.setCenter(250, 250);
+    ball.setRadius(8);
+    ball.setVelocity(1, -2);
 }
 
-void initPlayer() {
+void initPlayers() {
 
 }
 
@@ -62,14 +66,38 @@ void init() {
     height = 500;
     srand(time(NULL));
     initWheel();
-    initPlayer();
+    initPlayers();
     initColorBox();
-    initBars();
+    initPongBars();
+    initPongBall();
 }
 void initGL() {
     glClearColor(0.0f, 1.0f, 1.0f, 0.0f);
 }
+void moveBall(int val) {
+    ball.move(ball.getXVelocity(), ball.getYVelocity());
+    // Ball hits top
+    if (ball.getTopY() < (ball.getRadius() * 2)) {
+        ball.bounceY();
+        //ball.setCenterY(ball.getRadius());
+    }
+    // Ball hits bottom
+    else if (ball.getBottomY() > height) {
+        ball.bounceY();
+        //ball.setCenterY(height - ball.getRadius());
 
+    }
+    else if (ball.getLeftX() < (ball.getRadius() * 2)) {
+        ball.bounceX();
+        //ball.setCenterX(ball.getRadius());
+    }
+    else if (ball.getRightX() > width) {
+        ball.bounceX();
+        //ball.setCenterX(width - ball.getRadius());
+    }
+
+    glutPostRedisplay();
+}
 void spinWheel(int val) {
     /**
      * TODO: Pass in target index and slow rotation angle as it reaches target
@@ -113,18 +141,25 @@ void display() {
         glClearColor(seaGreen.red, seaGreen.green, seaGreen.blue, seaGreen.alpha);
         leftBar.draw();
         rightBar.draw();
+        ball.draw();
+        moveBall(0);
     }
 
     glFlush();
 }
-
-void kbd(unsigned int key, int x, int y) {
+void mouse(int button, int state, int x, int y) {
+    glutPostRedisplay();
+}
+void kbd(unsigned char key, int x, int y) {
     if (key == 27) {
         glutDestroyWindow(wd);
         exit(0);
     }
+    if (key == 'w') {
+        leftBar.moveY(-(height * 0.015));
+    }
     if (key == 's') {
-        spinning = true;
+        leftBar.moveY(height * 0.015);
     }
     glutPostRedisplay();
 }
@@ -133,13 +168,19 @@ void kbdS(int key, int x, int y) {
         case GLUT_KEY_RIGHT :
             spinning = true;
             break;
+        case GLUT_KEY_LEFT :
+
+            break;
+        case GLUT_KEY_DOWN :
+            rightBar.moveY(height * 0.015);
+            break;
+
+        case GLUT_KEY_UP :
+            rightBar.moveY(-(height * 0.015));
+            break;
     }
     glutPostRedisplay();
 }
-void mouse(int button, int state, int x, int y) {
-    glutPostRedisplay();
-}
-
 int main(int argc, char** argv) {
     /** Code from Runner GP **/
 
@@ -157,13 +198,15 @@ int main(int argc, char** argv) {
     // Register callback handler for window re-paint event
     glutDisplayFunc(display);
     glutTimerFunc(25, spinWheel, 0);
+    glutTimerFunc(25, moveBall, 0);
+
 
     // Our own OpenGL initialization
     initGL();
 
     // register keyboard press event processing function
     // works for numbers, letters, spacebar, etc.
-    //glutKeyboardFunc(kbd);
+    glutKeyboardFunc(kbd);
 
     // register special event: function keys, arrows, etc.
     glutSpecialFunc(kbdS);
