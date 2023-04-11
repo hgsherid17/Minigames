@@ -70,6 +70,9 @@ public:
     void setCenterX(double x);
     void setCenterY(double y);
 
+    void move(double x, double y);
+    void moveX(double x);
+    void moveY(double y);
     virtual void draw() const = 0;
 
 

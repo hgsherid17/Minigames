@@ -116,3 +116,17 @@ void Shape::setCenterX(double x) {
 void Shape::setCenterY(double y) {
     center.y = y;
 }
+
+void Shape::move(double x, double y) {
+    center.x += x;
+    center.y += y;
+}
+
+void Shape::moveX(double x) {
+    center.x += x;
+}
+
+void Shape::moveY(double y) {
+    center.y += y;
+}
+

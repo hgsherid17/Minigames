@@ -17,8 +17,15 @@
 #include <GL/glut.h>
 #endif
 
+enum Game {
+    PONG,
+    FLAPPY_BIRD,
+    COLORING_BOOK
+};
+
 void initWheel();
 void initColorBox();
+void initBars();
 void initPlayer();
 
 void init();

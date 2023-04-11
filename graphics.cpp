@@ -11,11 +11,15 @@ using namespace std;
 
 GLdouble width, height;
 Circle wheel;
+Quad leftBar;
+Quad rightBar;
 Quad colorBox;
 float rotationAngle = 0.0f;
 
 bool spinning = false;
 
+const color white(1, 1, 1, 1);
+const color black(0, 0, 0, 1);
 const color dustyRose(0.52, 0.39, 0.39, 1);
 const color oldGold(0.81, 0.71, 0.23, 1);
 const color seaGreen(0.137255, 0.556863, 0.419608, 1);
@@ -37,6 +41,17 @@ void initColorBox() {
     colorBox.setHeight(100);
     colorBox.setColor(seaGreen);
 }
+/* Pong */
+void initBars() {
+    leftBar.setCenter(20, 250);
+    rightBar.setCenter(480, 250);
+    leftBar.setColor(white);
+    rightBar.setColor(white);
+    leftBar.setWidth(10);
+    leftBar.setHeight(70);
+    rightBar.setWidth(10);
+    rightBar.setHeight(70);
+}
 
 void initPlayer() {
 
@@ -49,6 +64,7 @@ void init() {
     initWheel();
     initPlayer();
     initColorBox();
+    initBars();
 }
 void initGL() {
     glClearColor(0.0f, 1.0f, 1.0f, 0.0f);
@@ -94,12 +110,10 @@ void display() {
         glPopMatrix();
     }
     else {
-        colorBox.draw();
+        glClearColor(seaGreen.red, seaGreen.green, seaGreen.blue, seaGreen.alpha);
+        leftBar.draw();
+        rightBar.draw();
     }
-
-    //wheel.draw();
-
-    //wheel.drawWedges(12, wedgeColors);
 
     glFlush();
 }
