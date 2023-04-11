@@ -18,6 +18,7 @@
 #endif
 
 void initWheel();
+void initColorBox();
 void initPlayer();
 
 void init();

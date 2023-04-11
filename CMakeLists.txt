@@ -26,7 +26,9 @@ add_executable(graphics
         circle.cpp
         circle.h
         shape.cpp
-        shape.h)
+        shape.h
+        quad.h
+        quad.cpp)
 
 if (APPLE)
     target_link_libraries (graphics ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES})

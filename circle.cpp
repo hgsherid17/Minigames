@@ -68,6 +68,7 @@ Circle::Circle(color fill, double x, double y, double radius) : Shape(fill, x, y
 double Circle::getRadius() const {
     return radius;
 }
+
 double Circle::getLeftX() const {
     return center.x - radius;
 }

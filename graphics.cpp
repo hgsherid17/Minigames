@@ -5,11 +5,13 @@
 #include <stdlib.h>
 #include "circle.h"
 #include "shape.h"
+#include "quad.h"
 
 using namespace std;
 
 GLdouble width, height;
 Circle wheel;
+Quad colorBox;
 float rotationAngle = 0.0f;
 
 bool spinning = false;
@@ -29,6 +31,13 @@ void initWheel() {
     wheel.setColor(0, 0, 0, 1);
 }
 
+void initColorBox() {
+    colorBox.setCenter(250, 250);
+    colorBox.setWidth(100);
+    colorBox.setHeight(100);
+    colorBox.setColor(seaGreen);
+}
+
 void initPlayer() {
 
 }
@@ -39,6 +48,7 @@ void init() {
     srand(time(NULL));
     initWheel();
     initPlayer();
+    initColorBox();
 }
 void initGL() {
     glClearColor(0.0f, 1.0f, 1.0f, 0.0f);
@@ -84,7 +94,7 @@ void display() {
         glPopMatrix();
     }
     else {
-        wheel.drawWedges(12, wedgeColors);
+        colorBox.draw();
     }
 
     //wheel.draw();
