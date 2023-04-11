@@ -72,7 +72,7 @@ void Quad::setHeight(unsigned int h) {
     this->height = h;
 }
 
-bool Quad::isOverlapping(const Quad &q) const {
+/*bool Quad::isOverlapping(const Quad &q) const {
     // There are only two cases when rectangles are *not* overlapping:
     // When one is to the left of another
     if (q.getRightX() < getLeftX() || getRightX() < q.getLeftX()) {
@@ -85,7 +85,7 @@ bool Quad::isOverlapping(const Quad &q) const {
 
     return true;
 
-}
+}*/
 void Quad::draw() const{
     glLineWidth(2.0f);
     glColor3f(fill.red, fill.green, fill.blue);

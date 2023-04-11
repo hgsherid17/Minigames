@@ -68,7 +68,7 @@ void initPongBall() {
     ball.setColor(white);
     ball.setCenter(250, 250);
     ball.setRadius(8);
-    ball.setVelocity(1, -2);
+    ball.setVelocity(rand() % 2 == 0 ? 1 : -1, rand() % 2 == 0 ? 1 : -1);
 }
 
 void initPlayers() {
@@ -93,31 +93,19 @@ void moveBall(int val) {
     // Ball hits top
     if (ball.getTopY() < (ball.getRadius() * 2)) {
         ball.bounceY();
-        if (leftScore == 5) {
-            leftScore = 0;
-            rightScore = 0;
-        }
-        else {
-            ++leftScore;
-        }
 
         //ball.setCenterY(ball.getRadius());
     }
     // Ball hits bottom
     else if (ball.getBottomY() > height) {
         ball.bounceY();
-        if (leftScore == 5) {
-            leftScore = 0;
-            rightScore = 0;
-        }
-        else {
-            ++leftScore;
-        }
         //ball.setCenterY(height - ball.getRadius());
 
     }
     else if (ball.getLeftX() < (ball.getRadius() * 2)) {
-        ball.bounceX();
+        //ball.bounceX();
+        initPongBall();
+        //ball.setCenter(250, 250);
         if (rightScore == 5) {
             leftScore = 0;
             rightScore = 0;
@@ -128,7 +116,9 @@ void moveBall(int val) {
         //ball.setCenterX(ball.getRadius());
     }
     else if (ball.getRightX() > width) {
-        ball.bounceX();
+        initPongBall();
+        //ball.setCenter(250, 250);
+        //ball.bounceX();
         if (rightScore == 5) {
             leftScore = 0;
             rightScore = 0;
@@ -137,6 +127,9 @@ void moveBall(int val) {
             ++rightScore;
         }
         //ball.setCenterX(width - ball.getRadius());
+    }
+    if (ball.isColliding(leftBar) || ball.isColliding(rightBar)) {
+        ball.bounceX();
     }
 
     glutPostRedisplay();
@@ -238,10 +231,15 @@ void kbd(unsigned char key, int x, int y) {
         exit(0);
     }
     if (key == 'w') {
-        leftBar.moveY(-(height * 0.015));
+        if (leftBar.getTopY() != 20) {
+            leftBar.moveY(-(height * 0.05));
+        }
+
     }
     if (key == 's') {
-        leftBar.moveY(height * 0.015);
+        if (leftBar.getBottomY() != height) {
+            leftBar.moveY(height * 0.05);
+        }
     }
     glutPostRedisplay();
 }
@@ -254,11 +252,17 @@ void kbdS(int key, int x, int y) {
 
             break;
         case GLUT_KEY_DOWN :
-            rightBar.moveY(height * 0.015);
+            if (rightBar.getBottomY() != height) {
+                rightBar.moveY(height * 0.05);
+            }
+
             break;
 
         case GLUT_KEY_UP :
-            rightBar.moveY(-(height * 0.015));
+            if (rightBar.getTopY() != 0) {
+                rightBar.moveY(-(height * 0.05));
+            }
+
             break;
     }
     glutPostRedisplay();

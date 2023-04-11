@@ -152,7 +152,26 @@ void Shape::bounceX() {
 void Shape::bounceY() {
     yVelocity *= -1;
 }
-void Shape::collide(const Shape &s) {
+bool Shape::isColliding(const Shape &s) {
+    if (s.getTopY() < getTopY() && s.getBottomY() > getBottomY()) {
+        if (s.getRightX() == getLeftX()) {
+            return true;
+        }
+        if (s.getLeftX() == getRightX()) {
+            return true;
+        }
+    }
 
+    return false;
+
+    /*if (s.getRightX() < getLeftX() || getRightX() < s.getLeftX()) {
+        return false;
+    }
+    // When one is above the other
+    if (s.getBottomY() < getTopY() || getBottomY() < s.getTopY()) {
+        return false;
+    }
+
+    return true;*/
 
 }

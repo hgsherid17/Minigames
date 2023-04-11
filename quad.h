@@ -44,7 +44,7 @@ public:
     void setWidth(unsigned int w);
     void setHeight(unsigned int h);
 
-    bool isOverlapping(const Quad &q) const;
+   // bool isOverlapping(const Quad &q) const;
     void draw() const override;
 
 

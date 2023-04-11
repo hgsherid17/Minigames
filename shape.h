@@ -83,7 +83,7 @@ public:
     void bounceX();
     void bounceY();
 
-    void collide(const Shape &s);
+    bool isColliding(const Shape &s);
     virtual void draw() const = 0;
 
 
