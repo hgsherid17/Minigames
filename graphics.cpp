@@ -255,6 +255,12 @@ void mouse(int button, int state, int x, int y) {
                 for (Quad box : colorBoxes) {
                     if (user.isOverlapping(box)) {
                         user.setColor(box.getColor());
+                        if (box.getColor() == white) {
+                            user.setBorder(black);
+                        }
+                        else {
+                            user.setBorder(box.getColor());
+                        }
                     }
                 }
                 for (Circle circ : circles) {

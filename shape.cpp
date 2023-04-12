@@ -14,6 +14,18 @@ color::color(double r, double g, double b) : red(r), green(g), blue(b), alpha(1.
 color::color(double r, double g, double b, double a) : red(r), green(g), blue(b), alpha(a) {
 
 }
+bool color::operator == (const color &c) const {
+    if ((red == c.red) && (green == c.green) && (blue == c.blue)) {
+        return true;
+    }
+    return false;
+}
+bool color::operator != (const color &c) const {
+    if ((red != c.red) || (green != c.green) || (blue != c.blue)) {
+        return true;
+    }
+    return false;
+}
 
 /* Point ConSTRUCtors */
 point::point() : x(0), y(0) {
@@ -34,6 +46,9 @@ Shape::Shape (point center) : fill(0.0, 0.0, 0.0, 1.0), center(center), border(0
 
 }
 Shape::Shape(color fill, point center) : fill(fill), center(center), border(0.0, 0.0, 0.0, 1.0) {
+
+}
+Shape::Shape(color fill, color border) : fill(fill), border(border), center(0, 0) {
 
 }
 Shape::Shape(color fill, color border, point center) : fill(fill), center(center), border(border) {
@@ -103,6 +118,9 @@ double Shape::getCenterY() const {
 
 void Shape::setColor(color c) {
     fill = c;
+}
+void Shape::setBorder(color b) {
+    border = b;
 }
 void Shape::setColor(double r, double g, double b, double a) {
     fill = {r, g, b, a};
@@ -184,7 +202,7 @@ bool Shape::isColliding(const Shape &s) {
     return true;*/
 
 }
-bool Shape::isOverlapping(const Shape &s) const {
+bool Shape::isOverlapping(const Shape &s) {
     // There are only two cases when rectangles are *not* overlapping:
     // When one is to the left of another
     if (s.getRightX() < getLeftX() || getRightX() < s.getLeftX()) {

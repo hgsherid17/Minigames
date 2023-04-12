@@ -16,6 +16,8 @@ struct color {
     color();
     color(double r, double g, double b, double a);
     color(double r, double g, double b);
+    bool operator == (const color &c) const;
+    bool operator != (const color &c) const;
 };
 struct point {
     double x;
@@ -36,6 +38,7 @@ public:
     Shape(color fill);
     Shape(point center);
     Shape(color fill, point center);
+    Shape(color fill, color border);
     Shape(color fill, color border, point center);
     Shape(double r, double g, double b);
     Shape(double r, double g, double b, double a);
@@ -68,6 +71,7 @@ public:
 
     /* Setters */
     void setColor(color c);
+    void setBorder(color b);
     void setColor(double r, double g, double b, double a);
     void setVelocity(double x, double y);
     void setXVelocity(double x);
