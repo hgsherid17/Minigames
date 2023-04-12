@@ -27,14 +27,16 @@ struct point {
 class Shape {
 protected:
     color fill;
+    color border;
     point center;
     double xVelocity;
     double yVelocity;
 public:
     Shape();
     Shape(color fill);
-    Shape (point center);
+    Shape(point center);
     Shape(color fill, point center);
+    Shape(color fill, color border, point center);
     Shape(double r, double g, double b);
     Shape(double r, double g, double b, double a);
     Shape(double x, double y);
@@ -43,11 +45,13 @@ public:
     Shape(double r, double g, double b, point center);
     Shape(double r, double g, double b, double a, point center);
     Shape(color fill, double x, double y);
+    Shape(color fill, color border, double x, double y);
 
     virtual ~Shape() = default;
 
     /* Getters */
     color getColor() const;
+    color getBorder() const;
     point getPoint() const;
     double getXVelocity() const;
     double getYVelocity() const;
@@ -85,6 +89,7 @@ public:
 
     bool isColliding(const Shape &s);
     virtual void draw() const = 0;
+    bool isOverlapping(const Shape &s);
 
 
 };

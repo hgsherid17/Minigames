@@ -15,6 +15,9 @@ Quad::Quad(point center) : Shape(center), width(0), height(0) {
 Quad::Quad(color fill, point center) : Shape(fill, center), width(0), height(0) {
 
 }
+Quad::Quad(color fill, double x, double y) : Shape(fill, x, y), width(0), height(0) {
+
+}
 Quad::Quad(color fill, point center, unsigned int width, unsigned int height) : Shape(fill, center), width(width), height(height) {
 
 }
@@ -87,19 +90,26 @@ void Quad::setHeight(unsigned int h) {
 
 }*/
 void Quad::draw() const{
-    glLineWidth(2.0f);
     glColor3f(fill.red, fill.green, fill.blue);
     glBegin(GL_TRIANGLE_STRIP);
 
     glVertex2f(center.x, center.y);
-
     glVertex2f(center.x - (width / 2), center.y + (height / 2));
     glVertex2f(center.x + (width / 2), center.y + (height / 2));
     glVertex2f(center.x - (width / 2), center.y - (height / 2));
     glVertex2f(center.x + (width / 2), center.y - (height / 2));
+    glEnd();
 
+    glLineWidth(0.5f);
+    glColor3f(0, 0, 0);
+    glBegin(GL_LINE_LOOP);
 
+    //glVertex2f(center.x, center.y);
 
+    glVertex2f(center.x - (width / 2), center.y - (height / 2));
+    glVertex2f(center.x - (width / 2), center.y + (height / 2));
+    glVertex2f(center.x + (width / 2), center.y + (height / 2));
+    glVertex2f(center.x + (width / 2), center.y - (height / 2));
 
     glEnd();
 }

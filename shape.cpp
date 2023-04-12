@@ -24,45 +24,54 @@ point::point(double x, double y) : x(x), y(y) {
 }
 
 /* Shape Constructors */
-Shape::Shape() : fill(0.0, 0.0, 0.0, 1.0), center(0,0){
+Shape::Shape() : fill(0.0, 0.0, 0.0, 1.0), center(0,0), border(0.0, 0.0, 0.0, 1.0){
 
 }
-Shape::Shape(color fill) : fill(fill), center(0, 0){
+Shape::Shape(color fill) : fill(fill), center(0, 0), border(0.0, 0.0, 0.0, 1.0){
 
 }
-Shape::Shape (point center) : fill(0.0, 0.0, 0.0, 1.0), center(center) {
+Shape::Shape (point center) : fill(0.0, 0.0, 0.0, 1.0), center(center), border(0.0, 0.0, 0.0, 1.0) {
 
 }
-Shape::Shape(color fill, point center) : fill(fill), center(center) {
+Shape::Shape(color fill, point center) : fill(fill), center(center), border(0.0, 0.0, 0.0, 1.0) {
 
 }
-Shape::Shape(double r, double g, double b) : fill(r, g, b, 1.0), center(0, 0) {
+Shape::Shape(color fill, color border, point center) : fill(fill), center(center), border(border) {
 
 }
-Shape::Shape(double r, double g, double b, double a) : fill(r, g, b, a), center(0, 0) {
+Shape::Shape(double r, double g, double b) : fill(r, g, b, 1.0), center(0, 0), border(0.0, 0.0, 0.0, 1.0) {
 
 }
-Shape::Shape(double x, double y) : fill(0.0, 0.0, 0.0, 1.0), center(x, y) {
+Shape::Shape(double r, double g, double b, double a) : fill(r, g, b, a), center(0, 0), border(0.0, 0.0, 0.0, 1.0) {
 
 }
-Shape::Shape(double r, double g, double b, double x, double y) : fill(r, g, b, 1.0), center(x, y) {
+Shape::Shape(double x, double y) : fill(0.0, 0.0, 0.0, 1.0), center(x, y), border(0.0, 0.0, 0.0, 1.0) {
 
 }
-Shape::Shape(double r, double g, double b, double a, double x, double y) : fill(r, g, b, a), center(x, y) {
+Shape::Shape(double r, double g, double b, double x, double y) : fill(r, g, b, 1.0), center(x, y), border(0.0, 0.0, 0.0, 1.0) {
 
 }
-Shape::Shape(double r, double g, double b, point center) : fill(r, g, b, 1.0), center(center) {
+Shape::Shape(double r, double g, double b, double a, double x, double y) : fill(r, g, b, a), center(x, y), border(0.0, 0.0, 0.0, 1.0) {
 
 }
-Shape::Shape(double r, double g, double b, double a, point center) : fill(r, g, b, a), center(center) {
+Shape::Shape(double r, double g, double b, point center) : fill(r, g, b, 1.0), center(center), border(0.0, 0.0, 0.0, 1.0) {
 
 }
-Shape::Shape(color fill, double x, double y) : fill(fill), center(x, y) {
+Shape::Shape(double r, double g, double b, double a, point center) : fill(r, g, b, a), center(center), border(0.0, 0.0, 0.0, 1.0) {
+
+}
+Shape::Shape(color fill, double x, double y) : fill(fill), center(x, y), border(0.0, 0.0, 0.0, 1.0) {
+
+}
+Shape::Shape(color fill, color border, double x, double y) : fill(fill), border(border), center(x, y) {
 
 }
 
 color Shape::getColor() const {
     return fill;
+}
+color Shape::getBorder() const {
+    return border;
 }
 point Shape::getPoint() const {
     return center;
@@ -175,3 +184,18 @@ bool Shape::isColliding(const Shape &s) {
     return true;*/
 
 }
+bool Shape::isOverlapping(const Shape &s) const {
+    // There are only two cases when rectangles are *not* overlapping:
+    // When one is to the left of another
+    if (s.getRightX() < getLeftX() || getRightX() < s.getLeftX()) {
+        return false;
+    }
+    // When one is above the other
+    if (s.getBottomY() < getTopY() || getBottomY() < s.getTopY()) {
+        return false;
+    }
+
+    return true;
+}
+
+

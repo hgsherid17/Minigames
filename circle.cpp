@@ -90,13 +90,21 @@ void Circle::setRadius(double r) {
 }
 
 void Circle::draw() const {
-    glLineWidth(2.0f);
+    /* Draw fill */
     glColor3f(fill.red, fill.green, fill.blue);
-
-    /* Outline wheel */
     glBegin(GL_TRIANGLE_FAN);
+    for (double i = 0; i < 2.0*PI+0.05; i += (2.0*PI)/360.0) {
+        glVertex2f(center.x + (radius * cos(i)),
+                   center.y + (radius * sin(i)));
+    }
+    glEnd();
 
-    glVertex2i(center.x, center.y);
+    /* Draw outline */
+    glLineWidth(1.5f);
+    glColor3f(border.red, border.green, border.blue);
+    glBegin(GL_LINE_LOOP);
+
+    //glVertex2i(center.x, center.y);
 
     for (double i = 0; i < 2.0*PI+0.05; i += (2.0*PI)/360.0) {
         glVertex2f(center.x + (radius * cos(i)),
@@ -141,3 +149,14 @@ void Circle::spin(float rotationAngle) {
 
     // Spin to a random chosen index
 }
+/*
+bool Circle::isOverlapping(const Shape &s) const {
+    double left = center.x - radius;
+    double right = center.x + radius;
+    double top = center.y - radius;
+    double bottom = center.y + radius;
+    if (left > s.getLeftX() && right < s.getRightX() && top > getTopY() && bottom < getBottomY()) {
+        return true;
+    }
+    return false;
+}*/
