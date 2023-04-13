@@ -5,6 +5,7 @@
 #ifndef M1OEP_HGSHERID_OVAL_H
 #define M1OEP_HGSHERID_OVAL_H
 #include "shape.h"
+#include "graphics.h"
 
 class Oval : public Shape {
 private:
@@ -26,6 +27,10 @@ public:
     /* Getters */
     double getRadiusX();
     double getRadiusY();
+    double getLeftX() const override;
+    double getRightX() const override;
+    double getTopY() const override;
+    double getBottomY() const override;
 
     /* Setters */
     void setRadiusX(double x);

@@ -1,4 +1,5 @@
 #include "oval.h"
+using namespace std;
 
 Oval::Oval() : Shape() {
 
@@ -44,6 +45,18 @@ double Oval::getRadiusX() {
 double Oval::getRadiusY() {
     return radiusY;
 }
+double Oval::getLeftX() const {
+    return center.x - radiusX;
+}
+double Oval::getRightX() const {
+    return center.x + radiusX;
+}
+double Oval::getTopY() const  {
+    return center.y - radiusY;
+}
+double Oval::getBottomY() const {
+    return center.y + radiusY;
+}
 
 /* Setters */
 void Oval::setRadiusX(double x) {
@@ -55,7 +68,28 @@ void Oval::setRadiusY(double y) {
 
 
 void Oval::draw() const {
+    /* Draw Fill */
+    glBegin(GL_TRIANGLE_FAN);
+    glColor3f(fill.red, fill.green, fill.blue);
 
+    for (double i = 0; i < 2.0*PI+0.05; i += (2.0*PI)/360.0) {
+        glVertex2f(center.x + (radiusX * cos(i)),
+                   center.y + (radiusY * sin(i)));
+    }
+
+    glEnd();
+
+
+    /* Draw Outline */
+    glBegin(GL_LINE_LOOP);
+    glColor3f(border.red, border.green, border.blue);
+
+    for (double i = 0; i < 2.0*PI+0.05; i += (2.0*PI)/360.0) {
+        glVertex2f(center.x + (radiusX * cos(i)),
+                   center.y + (radiusY * sin(i)));
+    }
+
+    glEnd();
 
 
 }

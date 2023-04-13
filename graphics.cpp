@@ -6,14 +6,18 @@
 #include "circle.h"
 #include "shape.h"
 #include "quad.h"
+#include "oval.h"
+#include "cloud.h"
 #include <string>
 #include <fstream>
+#include <memory>
 
 using namespace std;
 
 GLdouble width, height;
 Circle wheel;
 Circle user;
+Oval ov;
 
 /* Pong */
 Quad leftBar;
@@ -28,7 +32,14 @@ const int SCORE_POS_Y = 50;
 
 /* Coloring Book */
 vector<Quad> colorBoxes;
-vector<Circle> circles;
+Quad background;
+vector<unique_ptr<Shape>> cat;
+vector<unique_ptr<Shape>> dog;
+
+
+// Flower
+Circle recep;
+vector<Oval> petals;
 
 float rotationAngle = 0.0f;
 
@@ -58,6 +69,12 @@ void initWheel() {
 }
 
 void initColorBox() {
+    // Torso
+    cat.push_back(make_unique<Oval>(white, black, 30 + (width / 2), (height/2), 80, 200));
+    // Head
+    cat.push_back(make_unique<Circle>(white, 30 + (width / 2), ((height / 2) - 180), 10));
+
+    // Init color bixes
     colorBoxes.push_back(Quad(red, 30, 60));
     colorBoxes.push_back(Quad(orange, 30, 120));
     colorBoxes.push_back(Quad(yellow, 30, 180));
@@ -67,9 +84,18 @@ void initColorBox() {
     colorBoxes.push_back(Quad(black, 30, 420));
     colorBoxes.push_back(Quad(white, 30, 480));
 
-    for (int i = 100; i <= 500; i += 100){
-        circles.push_back(Circle(white, 300, i, 20));
-    }
+    recep.setRadius(35);
+    recep.setColor(white);
+    recep.setCenter(30 + (width / 2), height /2);
+
+
+    ov.setColor(white);
+    ov.setBorder(black);
+    ov.setRadiusX(20);
+    ov.setRadiusY(60);
+    ov.setCenter(width/2, height/2);
+
+
 }
 /* Pong */
 void initPongBars() {
@@ -91,7 +117,7 @@ void initPongBall() {
 }
 
 void initPlayers() {
-    user.setColor(white);
+    user.setColor(red);
     user.setRadius(10);
 }
 
@@ -227,8 +253,8 @@ void display() {
             box.draw();
         }
 
-        for (Circle &circ : circles) {
-            circ.draw();
+        for (const unique_ptr<Shape> &s : cat) {
+            s->draw();
         }
 
         user.draw();
@@ -263,9 +289,9 @@ void mouse(int button, int state, int x, int y) {
                         }
                     }
                 }
-                for (Circle circ : circles) {
-                    if (user.isOverlapping(circ)) {
-                        circ.setColor(user.getColor());
+                for (const unique_ptr<Shape> &s : cat) {
+                    if (s->isOverlapping(user)) {
+                        s->setColor(user.getColor());
                     }
                 }
             }
