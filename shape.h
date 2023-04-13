@@ -94,6 +94,7 @@ public:
     bool isColliding(const Shape &s);
     virtual void draw() const = 0;
     bool isOverlapping(const Shape &s);
+    virtual void drawRotated(double angle) const = 0;
 
 
 };

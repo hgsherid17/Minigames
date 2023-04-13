@@ -113,3 +113,6 @@ void Quad::draw() const{
 
     glEnd();
 }
+void Quad::drawRotated(double angle) const {
+    // Nah
+}

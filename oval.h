@@ -37,6 +37,7 @@ public:
     void setRadiusY(double y);
 
     void draw() const override;
+    void drawRotated(double angle) const override;
 
 };
 

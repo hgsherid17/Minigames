@@ -36,13 +36,13 @@ point::point(double x, double y) : x(x), y(y) {
 }
 
 /* Shape Constructors */
-Shape::Shape() : fill(0.0, 0.0, 0.0, 1.0), center(0,0), border(0.0, 0.0, 0.0, 1.0){
+Shape::Shape() : fill(1.0, 1.0, 1.0, 1.0), center(0,0), border(0.0, 0.0, 0.0, 1.0){
 
 }
 Shape::Shape(color fill) : fill(fill), center(0, 0), border(0.0, 0.0, 0.0, 1.0){
 
 }
-Shape::Shape (point center) : fill(0.0, 0.0, 0.0, 1.0), center(center), border(0.0, 0.0, 0.0, 1.0) {
+Shape::Shape (point center) : fill(1.0, 1.0, 1.0, 1.0), center(center), border(0.0, 0.0, 0.0, 1.0) {
 
 }
 Shape::Shape(color fill, point center) : fill(fill), center(center), border(0.0, 0.0, 0.0, 1.0) {
@@ -60,7 +60,7 @@ Shape::Shape(double r, double g, double b) : fill(r, g, b, 1.0), center(0, 0), b
 Shape::Shape(double r, double g, double b, double a) : fill(r, g, b, a), center(0, 0), border(0.0, 0.0, 0.0, 1.0) {
 
 }
-Shape::Shape(double x, double y) : fill(0.0, 0.0, 0.0, 1.0), center(x, y), border(0.0, 0.0, 0.0, 1.0) {
+Shape::Shape(double x, double y) : fill(1.0, 1.0, 1.0, 1.0), center(x, y), border(0.0, 0.0, 0.0, 1.0) {
 
 }
 Shape::Shape(double r, double g, double b, double x, double y) : fill(r, g, b, 1.0), center(x, y), border(0.0, 0.0, 0.0, 1.0) {
@@ -215,5 +215,6 @@ bool Shape::isOverlapping(const Shape &s) {
 
     return true;
 }
+
 
 

@@ -47,6 +47,7 @@ public:
 
    // bool isOverlapping(const Quad &q) const;
     void draw() const override;
+    void drawRotated(double angle) const override;
 
 
 };

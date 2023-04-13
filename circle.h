@@ -50,6 +50,7 @@ public:
     void setRadius(double r);
 
     void draw() const override;
+    void drawRotated(double angle) const override;
     void drawWedges(int numWedges, vector<color> wedgeColors);
 
     void spin(float rotationAngle);

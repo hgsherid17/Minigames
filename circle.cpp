@@ -100,7 +100,7 @@ void Circle::draw() const {
     glEnd();
 
     /* Draw outline */
-    glLineWidth(1.5f);
+    glLineWidth(1.0f);
     glColor3f(border.red, border.green, border.blue);
     glBegin(GL_LINE_LOOP);
 
@@ -160,3 +160,6 @@ bool Circle::isOverlapping(const Shape &s) const {
     }
     return false;
 }*/
+void Circle::drawRotated(double angle) const {
+    // Nah
+}

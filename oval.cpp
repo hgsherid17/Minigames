@@ -82,6 +82,7 @@ void Oval::draw() const {
 
     /* Draw Outline */
     glBegin(GL_LINE_LOOP);
+    glLineWidth(1.0f);
     glColor3f(border.red, border.green, border.blue);
 
     for (double i = 0; i < 2.0*PI+0.05; i += (2.0*PI)/360.0) {
@@ -92,4 +93,36 @@ void Oval::draw() const {
     glEnd();
 
 
+}
+void Oval::drawRotated(double angle) const {
+    glPushMatrix();
+    glTranslatef(center.x, center.y, 0.0f);
+    glRotatef(angle, 0.0f, 0.0f, 1.0f);
+    glTranslatef(-center.x, -center.y, 0.0f);
+
+    /* Draw Fill */
+    glBegin(GL_TRIANGLE_FAN);
+    glColor3f(fill.red, fill.green, fill.blue);
+
+    for (double i = 0; i < 2.0*PI+0.05; i += (2.0*PI)/360.0) {
+        glVertex2f(center.x + (radiusX * cos(i)),
+                   center.y + (radiusY * sin(i)));
+    }
+
+    glEnd();
+
+
+    /* Draw Outline */
+    glBegin(GL_LINE_LOOP);
+    glLineWidth(1.0f);
+    glColor3f(border.red, border.green, border.blue);
+
+    for (double i = 0; i < 2.0*PI+0.05; i += (2.0*PI)/360.0) {
+        glVertex2f(center.x + (radiusX * cos(i)),
+                   center.y + (radiusY * sin(i)));
+    }
+
+    glEnd();
+
+    glPopMatrix();
 }
