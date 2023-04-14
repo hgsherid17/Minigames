@@ -21,6 +21,9 @@ Quad::Quad(color fill, double x, double y) : Shape(fill, x, y), width(0), height
 Quad::Quad(color fill, point center, unsigned int width, unsigned int height) : Shape(fill, center), width(width), height(height) {
 
 }
+Quad:: Quad(color fill, double x, double y, unsigned int width, unsigned int height) : Shape(fill, x, y), width(width), height(height) {
+
+}
 Quad::Quad(double r, double g, double b) : Shape(r, g, b), width(0), height(0) {
 
 }

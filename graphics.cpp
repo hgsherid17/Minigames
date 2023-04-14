@@ -13,7 +13,9 @@
 #include <memory>
 
 using namespace std;
+// Theres a lot going on. my apologies
 
+Game screen = WHEEL;
 GLdouble width, height;
 Circle wheel;
 Circle user;
@@ -33,6 +35,8 @@ const int SCORE_POS_Y = 50;
 /* Coloring Book */
 vector<Quad> colorBoxes;
 Quad background;
+int bkgHeight;
+int bkgWidth;
 vector<unique_ptr<Shape>> cat;
 vector<unique_ptr<Shape>> dog;
 
@@ -53,9 +57,15 @@ const color yellow(1, 1, 0, 1);
 const color green(0, 1, 0, 1);
 const color blue(0, 0, 1, 0);
 const color purple(0.5, 0, 1, 1);
+
+const color skyBlue(77/255.0, 213/255.0, 240/255.0);
+const color grassGreen(26/255.0, 176/255.0, 56/255.0);
+
+const color seaGreen(0.137255, 0.556863, 0.419608, 1);
+
+
 const color dustyRose(0.52, 0.39, 0.39, 1);
 const color oldGold(0.81, 0.71, 0.23, 1);
-const color seaGreen(0.137255, 0.556863, 0.419608, 1);
 const color steelBlue(0.560784, 0.560784, 0.737255, 1);
 
 vector<color> wedgeColors = {dustyRose, oldGold, seaGreen, steelBlue};
@@ -69,20 +79,45 @@ void initWheel() {
 }
 
 void initColorBox() {
-    // Torso
-    cat.push_back(make_unique<Oval>(white, black, 30 + (width / 2), (height/2), 80, 200));
-    // Head
-    cat.push_back(make_unique<Circle>(white, 30 + (width / 2), ((height / 2) - 180), 10));
+    //background.setBorder(black);
+   //background.setColor(white);
+    background.setCenter((width / 2) + 25, (height / 2));
+    background.setSize(460, 480);
 
-    // Init color bixes
-    colorBoxes.push_back(Quad(red, 30, 60));
-    colorBoxes.push_back(Quad(orange, 30, 120));
-    colorBoxes.push_back(Quad(yellow, 30, 180));
-    colorBoxes.push_back(Quad(green, 30, 240));
-    colorBoxes.push_back(Quad(blue, 30, 300));
-    colorBoxes.push_back(Quad(purple, 30, 360));
-    colorBoxes.push_back(Quad(black, 30, 420));
-    colorBoxes.push_back(Quad(white, 30, 480));
+    // Background
+    dog.push_back(make_unique<Quad>(background));
+
+    // Tail
+    dog.push_back(make_unique<Oval>(white, black, bkgWidth + 110, bkgHeight + 150, 10, 45));
+    // Torso
+    dog.push_back(make_unique<Oval>(white, black, bkgWidth, bkgHeight + 60, 110, 180));
+    // Ears
+    dog.push_back(make_unique<Oval>(white, black, bkgWidth - 70, bkgHeight  - 130, 50, 90));
+    dog.push_back(make_unique<Oval>(white, black, bkgWidth + 70, bkgHeight  - 130, 50, 90));
+    // Paws
+    dog.push_back(make_unique<Circle>(white, bkgWidth - 100, bkgHeight + 10, 35));
+    dog.push_back(make_unique<Circle>(white, bkgWidth + 100, bkgHeight + 10, 35));
+    dog.push_back(make_unique<Circle>(white, bkgWidth - 70, bkgHeight + 205, 35));
+    dog.push_back(make_unique<Circle>(white, bkgWidth + 70, bkgHeight + 205, 35));
+
+    // Head
+    dog.push_back(make_unique<Circle>(white, bkgWidth, bkgHeight - 130, 85));
+    // Eyes
+    dog.push_back(make_unique<Circle>(white, bkgWidth - 30, bkgHeight - 150, 10));
+    dog.push_back(make_unique<Circle>(white, bkgWidth + 30, bkgHeight - 150, 10));
+
+    // Nose
+    dog.push_back(make_unique<Oval>(white, black, bkgWidth, bkgHeight - 120, 20, 10));
+
+    // Init color boxes
+    colorBoxes.push_back(Quad(red, 35, 65));
+    colorBoxes.push_back(Quad(orange, 35, 125));
+    colorBoxes.push_back(Quad(yellow, 35, 185));
+    colorBoxes.push_back(Quad(green, 35, 245));
+    colorBoxes.push_back(Quad(blue, 35, 305));
+    colorBoxes.push_back(Quad(purple, 35, 365));
+    colorBoxes.push_back(Quad(black, 35, 425));
+    colorBoxes.push_back(Quad(white, 35, 485));
 
     recep.setRadius(35);
     recep.setColor(white);
@@ -118,12 +153,15 @@ void initPongBall() {
 
 void initPlayers() {
     user.setColor(red);
-    user.setRadius(10);
+    user.setBorder(red);
+    user.setRadius(6);
 }
 
 void init() {
     width = 550;
     height = 550;
+    bkgHeight = (height / 2);
+    bkgWidth = (width / 2) + 25;
     srand(time(NULL));
     initWheel();
     initPlayers();
@@ -134,7 +172,7 @@ void init() {
 void initGL() {
     glClearColor(0.0f, 1.0f, 1.0f, 0.0f);
 }
-void showPongScore(string filename, int x, int y, int pencilSize) {
+void drawFromFile(string filename, int x, int y, int pencilSize, color c1, color c2) {
     ifstream inFile("../" + filename);
     inFile >> noskipws;
     int xCoord = x;
@@ -144,8 +182,8 @@ void showPongScore(string filename, int x, int y, int pencilSize) {
     while (inFile >> letter) {
         draw = true;
         switch(letter) {
-            case 'w' : glColor3f(1, 1, 1); break;
-            case ' ': glColor3f(0.137255, 0.556863, 0.419608); break; //seaGreen
+            case 'w' : glColor3f(c1.red, c1.green, c1.blue); break;
+            case ' ': glColor3f(c2.red, c2.green, c2.blue); break; //seaGreen
             default: // newline
                 draw = false;
                 xCoord = x;
@@ -163,6 +201,7 @@ void showPongScore(string filename, int x, int y, int pencilSize) {
     }
     inFile.close();
 }
+
 void moveBall(int val) {
     ball.move(ball.getXVelocity(), ball.getYVelocity());
     // Ball hits top
@@ -183,7 +222,7 @@ void moveBall(int val) {
         //ball.setCenter(250, 250);
         ++rightScore;
         if (rightScore == 2) {
-            showPongScore("winner.txt", width - SCORE_POS_X, height - SCORE_POS_Y, 2);
+            drawFromFile("winner.txt", width - SCORE_POS_X, height - SCORE_POS_Y, 2, white, seaGreen);
             leftScore = 0;
             rightScore = 0;
         }
@@ -195,7 +234,7 @@ void moveBall(int val) {
         //ball.bounceX();
         ++leftScore;
         if (leftScore == 2) {
-            showPongScore("winner.txt", SCORE_POS_X, height - SCORE_POS_X, 2);
+            drawFromFile("winner.txt", SCORE_POS_X, height - SCORE_POS_X, 2, white, seaGreen);
             leftScore = 0;
             rightScore = 0;
         }
@@ -238,40 +277,62 @@ void display() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // DO NOT CHANGE THIS LINE
 
     /* Draw here */
-    if (spinning) {
-        glPushMatrix();
-        glTranslatef(wheel.getCenterX(), wheel.getCenterY(), 0.0f);
-        spinWheel(0);
-        glTranslatef(-(wheel.getCenterX()), -(wheel.getCenterY()), 0.0f);
-        wheel.drawWedges(12, wedgeColors);
-        glPopMatrix();
-    }
-    else {
-        glClearColor(white.red, white.green, white.blue, white.alpha);
-        for (Quad &box : colorBoxes) {
-            box.setSize(50, 50);
-            box.draw();
-        }
+    switch(screen) {
+        case WHEEL :
+            glPushMatrix();
+            glTranslatef(wheel.getCenterX(), wheel.getCenterY(), 0.0f);
+            spinWheel(0);
+            glTranslatef(-(wheel.getCenterX()), -(wheel.getCenterY()), 0.0f);
+            wheel.drawWedges(12, wedgeColors);
+            glPopMatrix();
 
-        for (const unique_ptr<Shape> &s : cat) {
-            s->draw();
-        }
+            break;
+        case PONG :
+            glClearColor(seaGreen.red, seaGreen.green, seaGreen.blue, seaGreen.alpha);
+            leftBar.draw();
+            rightBar.draw();
+            ball.draw();
+            moveBall(0);
 
-        user.draw();
-       /* glClearColor(seaGreen.red, seaGreen.green, seaGreen.blue, seaGreen.alpha);
-        leftBar.draw();
-        rightBar.draw();
-        ball.draw();
-        moveBall(0);
+            drawFromFile(to_string(leftScore) + ".txt", SCORE_POS_X, SCORE_POS_Y, 10, white, seaGreen);
+            drawFromFile(to_string(rightScore)+".txt", width - SCORE_POS_X, SCORE_POS_Y, 10, white, seaGreen);
+            break;
+        case COLORING_BOOK :
+            glClearColor(white.red, white.green, white.blue, white.alpha);
+            for (Quad &box : colorBoxes) {
+                box.setSize(50, 50);
+                box.draw();
+            }
 
-        showPongScore(to_string(leftScore) + ".txt", SCORE_POS_X, SCORE_POS_Y, 10);
-        showPongScore(to_string(rightScore)+".txt", width - SCORE_POS_X, SCORE_POS_Y, 10);
-    */
+
+            for (const unique_ptr<Shape> &s : dog) {
+                if (s == dog[3]) {
+                    s->drawRotated(30);
+                }
+                else if (s == dog[4]) {
+                    s->drawRotated(-30);
+                }
+                else if (s == dog[1]) {
+                    s->drawRotated(45);
+                }
+                else {
+                    s->draw();
+                }
+            }
+            drawFromFile("dog.txt", bkgWidth - 47, bkgHeight - 110, 1, black, dog[9]->getColor());
+
+            user.draw();
+            break;
+        case FLAPPY_BIRD :
+            glClearColor(skyBlue.red, skyBlue.green, skyBlue.blue, skyBlue.alpha);
+            break;
+
     }
 
     glFlush();
 }
 void mouse(int button, int state, int x, int y) {
+    bool under = true;
 
     switch(state) {
         case GLUT_DOWN :
@@ -281,19 +342,17 @@ void mouse(int button, int state, int x, int y) {
                 for (Quad box : colorBoxes) {
                     if (user.isOverlapping(box)) {
                         user.setColor(box.getColor());
-                        if (box.getColor() == white) {
-                            user.setBorder(black);
-                        }
-                        else {
-                            user.setBorder(box.getColor());
-                        }
+                        user.setBorder(box.getColor());
                     }
                 }
-                for (const unique_ptr<Shape> &s : cat) {
-                    if (s->isOverlapping(user)) {
-                        s->setColor(user.getColor());
+                reverse(dog.begin(), dog.end());
+                for (int i = 0; i < dog.size(); i++) {
+                    if (dog[i]->isOverlapping(user)) {
+                        dog[i]->setColor(user.getColor());
+                        i = dog.size();
                     }
                 }
+                reverse(dog.begin(), dog.end());
             }
             break;
     }
@@ -325,17 +384,22 @@ void kbd(unsigned char key, int x, int y) {
 void kbdS(int key, int x, int y) {
     switch(key) {
         case GLUT_KEY_RIGHT :
+            screen = PONG;
             spinning = true;
             break;
         case GLUT_KEY_LEFT :
-
+            if (screen == COLORING_BOOK) {
+                screen = FLAPPY_BIRD;
+            }
+            else {
+                screen = COLORING_BOOK;
+            }
             break;
         case GLUT_KEY_DOWN :
             if (rightBar.getBottomY() != height) {
                 rightBar.moveY(height * 0.05);
             }
             break;
-
         case GLUT_KEY_UP :
             if (rightBar.getTopY() != 0) {
                 rightBar.moveY(-(height * 0.05));
@@ -357,7 +421,7 @@ int main(int argc, char** argv) {
     glutInitWindowSize((int)width, (int)height);
     glutInitWindowPosition(100, 200); // Position the window's initial top-left corner
     /* create the window and store the handle to it */
-    wd = glutCreateWindow("Wheel of Fortune" /* title */ );
+    wd = glutCreateWindow("Minigames!" /* title */ );
 
     // Register callback handler for window re-paint event
     glutDisplayFunc(display);

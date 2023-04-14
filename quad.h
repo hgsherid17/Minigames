@@ -22,6 +22,7 @@ public:
     Quad(color fill, point center);
     Quad(color fill, double x, double y);
     Quad(color fill, point center, unsigned int width, unsigned int height);
+    Quad(color fill, double x, double y, unsigned int width, unsigned int height);
     Quad(double r, double g, double b);
     Quad(double r, double g, double b, double a);
     Quad(double r, double g, double b, point center);

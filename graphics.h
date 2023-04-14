@@ -16,7 +16,9 @@
 #else
 #include <GL/glut.h>
 #endif
-
+#include <string>
+#include "shape.h"
+using namespace std;
 enum Game {
     WHEEL,
     PONG,
@@ -34,6 +36,7 @@ void init();
 
 void initGL();
 
+void drawFromFile(string filename, int x, int y, int pencilSize, color c1, color c2);
 void moveBall(int val);
 void spinWheel(int val);
 
