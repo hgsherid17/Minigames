@@ -18,7 +18,7 @@ private:
 public:
     // Constructors
     Cloud();
-    Cloud(color fill, int x, int y, int width);
+    Cloud(color fill, color border, int x, int y, int width);
 
     // Move all shapes' x-values by the delta and jump the shapes that are fully negative x-values to be greater than width
     void moveLeftAndJumpX(int deltaX, int width);

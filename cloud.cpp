@@ -12,16 +12,16 @@ using namespace std;
 
 Cloud::Cloud() {
     // Call non-default constructor
-    Cloud({1, 1, 1}, 0, 0, 50);
+    Cloud({1, 1, 1}, {0, 0, 0}, 0, 0, 50);
 }
 
-Cloud::Cloud(color fill, int x, int y, int width) {
+Cloud::Cloud(color fill, color border, int x, int y, int width) {
     // width = 80
     // center x = 315
-    shapes.push_back(make_unique<Circle>(fill, x-(width/4), y, width/4));
-    shapes.push_back(make_unique<Circle>(fill, x+(width/4), y, width/4));
-    shapes.push_back(make_unique<Circle>(fill, x+(width/16), y-(width/8), width/4));
-    shapes.push_back(make_unique<Quad>(fill, x, y, width/2, width/2));
+    shapes.push_back(make_unique<Circle>(fill, border, x-(width/4), y, width/4));
+    shapes.push_back(make_unique<Circle>(fill, border, x+(width/4), y, width/4));
+    shapes.push_back(make_unique<Circle>(fill, border, x+(width/16), y-(width/8), width/4));
+    shapes.push_back(make_unique<Quad>(fill, border, x, y, width/2, width/2));
 }
 
 void Cloud::moveLeftAndJumpX(int deltaX, int width) {

@@ -30,6 +30,7 @@ public:
     Quad(double r, double g, double b, point center, unsigned int width, unsigned int height);
     Quad(double r, double g, double b, double a, point center, unsigned int width, unsigned int height);
     Quad(double r, double g, double b, double a, double x, double y, unsigned int width, unsigned int height);
+    Quad(color fill, color border, double x, double y, unsigned int width, unsigned int height);
 
     virtual ~Quad() = default;
 
@@ -47,6 +48,7 @@ public:
     void setHeight(unsigned int h);
 
    // bool isOverlapping(const Quad &q) const;
+    void moveLeftAndJumpX(int deltaX, int width);
     void draw() const override;
     void drawRotated(double angle) const override;
 

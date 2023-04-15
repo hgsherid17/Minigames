@@ -36,6 +36,7 @@ public:
     Circle(double r, double g, double b, point center, double radius);
     Circle(double r, double g, double b, double a, point center, double radius);
     Circle(color fill, double x, double y, double radius);
+    Circle(color fill, color border, double x, double y, double radius);
 
     virtual ~Circle() = default;
 

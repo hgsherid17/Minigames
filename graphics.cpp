@@ -39,11 +39,18 @@ int bkgHeight;
 int bkgWidth;
 vector<unique_ptr<Shape>> cat;
 vector<unique_ptr<Shape>> dog;
-
-
 // Flower
 Circle recep;
 vector<Oval> petals;
+
+/* Flappy Bird */
+vector<Cloud> clouds;
+vector<Quad> topPoles;
+vector<Quad> bottomPoles;
+Quad bird;
+
+Quad grass;
+
 
 float rotationAngle = 0.0f;
 
@@ -68,6 +75,7 @@ const color dustyRose(0.52, 0.39, 0.39, 1);
 const color oldGold(0.81, 0.71, 0.23, 1);
 const color steelBlue(0.560784, 0.560784, 0.737255, 1);
 
+const vector<color> poleColors = {dustyRose, steelBlue, seaGreen};
 vector<color> wedgeColors = {dustyRose, oldGold, seaGreen, steelBlue};
 
 int wd;
@@ -156,7 +164,35 @@ void initPlayers() {
     user.setBorder(red);
     user.setRadius(6);
 }
+void initFlappyBird() {
+    clouds.push_back(Cloud(white, white, 315, 100, 100));
+    clouds.push_back(Cloud(white, white,  115, 80, 80));
+    clouds.push_back(Cloud(white, white, 465, 50, 60));
 
+    grass.setColor(grassGreen);
+    grass.setWidth(width);
+    grass.setHeight(height/2);
+    grass.setCenter(width/2, height);
+
+    int poleTotal = width + 100;
+    int x = 100;
+
+    for (const color &c : poleColors) {
+        int h = rand() % 300 + 100;
+        topPoles.push_back(Quad(c, black, x, 0, 100, h));
+        bottomPoles.push_back(Quad(c, black, x, height, 100, poleTotal - h));
+
+        x += 200;
+    }
+
+    bird.setCenter(100, height/2);
+    bird.setColor(purple);
+    bird.setSize(50, 50);
+
+
+
+
+}
 void init() {
     width = 550;
     height = 550;
@@ -168,6 +204,7 @@ void init() {
     initColorBox();
     initPongBars();
     initPongBall();
+    initFlappyBird();
 }
 void initGL() {
     glClearColor(0.0f, 1.0f, 1.0f, 0.0f);
@@ -325,6 +362,21 @@ void display() {
             break;
         case FLAPPY_BIRD :
             glClearColor(skyBlue.red, skyBlue.green, skyBlue.blue, skyBlue.alpha);
+
+            grass.draw();
+
+            for (Cloud &c : clouds) {
+                c.draw();
+            }
+
+            for (Quad &t : topPoles) {
+                t.draw();
+            }
+            for (Quad &b : bottomPoles) {
+                b.draw();
+            }
+
+            bird.draw();
             break;
 
     }
@@ -379,6 +431,12 @@ void kbd(unsigned char key, int x, int y) {
             leftBar.moveY(height * 0.05);
         }
     }
+    if (key == 32) {
+        bird.moveY(-(height * 0.1));
+    }
+    else {
+        bird.moveY(height * 0.05);
+    }
     glutPostRedisplay();
 }
 void kbdS(int key, int x, int y) {
@@ -409,6 +467,25 @@ void kbdS(int key, int x, int y) {
     }
     glutPostRedisplay();
 }
+/** From Runner GP **/
+void cloudTimer(int dummy) {
+    for (Cloud& c : clouds) {
+        c.moveLeftAndJumpX(-1, width);
+    }
+
+    glutPostRedisplay();
+    glutTimerFunc(50, cloudTimer, dummy);
+}
+void poleTimer(int dummy) {
+    for (int i = 0; i < topPoles.size(); ++i) {
+        topPoles[i].moveLeftAndJumpX(-2, width);
+        bottomPoles[i].moveLeftAndJumpX(-2, width);
+    }
+
+    glutPostRedisplay();
+    glutTimerFunc(50, poleTimer, dummy);
+}
+
 int main(int argc, char** argv) {
     /** Code from Runner GP **/
 
@@ -445,7 +522,8 @@ int main(int argc, char** argv) {
     glutPassiveMotionFunc(cursor);
 
     // handles timer
-    //glutTimerFunc(0, cloudTimer, 0);
+    glutTimerFunc(0, cloudTimer, 0);
+    glutTimerFunc(0, poleTimer, 0);
     //glutTimerFunc(0, buildingTimer, 0);
 
     // Enter the event-processing loop

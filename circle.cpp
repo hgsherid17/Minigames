@@ -41,7 +41,9 @@ Circle::Circle(double r, double g, double b, point center) : Shape(r, g, b, cent
 Circle::Circle(double r, double g, double b, double a, point center) : Shape (r, g, b, a, center), radius(0) {
 
 }
-Circle::Circle(color fill, double x, double y) : Shape(fill, x, y), radius(0) {};
+Circle::Circle(color fill, double x, double y) : Shape(fill, x, y), radius(0) {
+
+}
 
 Circle::Circle(color fill, double radius) : Shape(fill) {
     setRadius(radius);
@@ -63,6 +65,9 @@ Circle::Circle(double r, double g, double b, double a, point center, double radi
 }
 Circle::Circle(color fill, double x, double y, double radius) : Shape(fill, x, y) {
     setRadius(radius);
+}
+Circle::Circle(color fill, color border, double x, double y, double radius) : Shape(fill, border, x, y), radius(radius) {
+
 }
 
 double Circle::getRadius() const {
@@ -131,15 +136,10 @@ void Circle::drawWedges(int numWedges, vector<color> wedgeColors) {
 
         if (wedgeIndex == wedgeColors.size() - 1) {
             wedgeIndex = 0;
-        }
-        else {
+        } else {
             wedgeIndex++;
         }
     }
-
-
-
-
 }
 
 void Circle::spin(float rotationAngle) {

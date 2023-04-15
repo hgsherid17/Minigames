@@ -45,6 +45,9 @@ Quad::Quad(double r, double g, double b, double a, point center, unsigned int wi
 Quad::Quad(double r, double g, double b, double a, double x, double y, unsigned int width, unsigned int height) : Shape(r, g, b, a, x, y), width(width), height(height) {
 
 }
+Quad::Quad(color fill, color border, double x, double y, unsigned int width, unsigned int height) : Shape(fill, border, x, y), width(width), height(height) {
+
+}
 
 /* Getters */
 unsigned int Quad::getWidth() {
@@ -77,6 +80,17 @@ void Quad::setWidth(unsigned int w) {
 void Quad::setHeight(unsigned int h) {
     this->height = h;
 }
+void Quad::moveLeftAndJumpX(int deltaX, int width) {
+    // Move all the shapes by deltaX
+    moveX(deltaX);
+    // If a shape has moved off the screen
+    if (getRightX() < 0) {
+        // Set it to the right of the screen so that it passes through again
+        setCenterX(width + (getRightX() - getLeftX()) / 2);
+    }
+
+
+}
 
 /*bool Quad::isOverlapping(const Quad &q) const {
     // There are only two cases when rectangles are *not* overlapping:
@@ -92,7 +106,8 @@ void Quad::setHeight(unsigned int h) {
     return true;
 
 }*/
-void Quad::draw() const{
+void Quad::draw() const {
+    /* Draw fill */
     glColor3f(fill.red, fill.green, fill.blue);
     glBegin(GL_TRIANGLE_STRIP);
 
@@ -103,8 +118,10 @@ void Quad::draw() const{
     glVertex2f(center.x + (width / 2), center.y - (height / 2));
     glEnd();
 
+    /* Draw outline */
     glLineWidth(0.5f);
-    glColor3f(0, 0, 0);
+
+    glColor3f(border.red, border.green, border.blue);
     glBegin(GL_LINE_LOOP);
 
     //glVertex2f(center.x, center.y);
