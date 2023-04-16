@@ -20,37 +20,39 @@
 #include "shape.h"
 using namespace std;
 enum Game {
-    WHEEL,
+    START_SCREEN,
     PONG,
-    //FLAPPY_START,
     FLAPPY_BIRD,
     FAIL,
     COLORING_BOOK
 };
 
-void initWheel();
-void initColorBox();
-void initPongBars();
+void initStartScreen();
+void initColoringBook();
 void initPongBall();
-void initPlayers();
+void initPong();
+void initFlappyBird();
 
 void init();
 
 void initGL();
 
 void drawFromFile(string filename, int x, int y, int pencilSize, color c1, color c2);
+void fall(int val);
+void jump(int val);
 void moveBall(int val);
 void spinWheel(int val);
 
 void display();
 
 void mouse(int button, int state, int x, int y);
+void cursor(int x, int y);
 
 void kbd(unsigned char key, int x, int y);
-
 void kbdS(int key, int x, int y);
 
-
+void cloudTimer(int dummy);
+void poleTimer(int dummy);
 
 
 

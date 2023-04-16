@@ -15,12 +15,11 @@
 
 
 using namespace std;
-// Theres a lot going on. my apologies
 
-Game screen = WHEEL;
+/* Start screen */
+Game screen = START_SCREEN;
 GLdouble width, height;
 Circle user;
-Oval ov;
 Circle wheel;
 
 Quad pongIcon;
@@ -33,8 +32,6 @@ Quad rightBar;
 Circle ball;
 int leftScore;
 int rightScore;
-bool leftWinner = false;
-bool rightWinner = false;
 const int SCORE_POS_X = 100;
 const int SCORE_POS_Y = 50;
 
@@ -43,25 +40,17 @@ vector<Quad> colorBoxes;
 Quad background;
 int bkgHeight;
 int bkgWidth;
-vector<unique_ptr<Shape>> cat;
 vector<unique_ptr<Shape>> dog;
-// Flower
-Circle recep;
-vector<Oval> petals;
 
 /* Flappy Bird */
 vector<Cloud> clouds;
 vector<Quad> topPoles;
 vector<Quad> bottomPoles;
 Circle bird;
-bool jumping = false;
-Quad start;
-
 Quad grass;
 
-float rotationAngle = 0.0f;
 
-bool spinning = false;
+float rotationAngle = 0.0f;
 
 const color white(1, 1, 1, 1);
 const color black(0, 0, 0, 1);
@@ -83,7 +72,7 @@ vector<color> wedgeColors = {red, orange, yellow, green, blue, purple};
 
 int wd;
 
-void initWheel() {
+void initStartScreen() {
     int iconHeight = height - 200;
     wheel.setRadius(10);
     wheel.setCenter(width/2, height/2);
@@ -101,15 +90,14 @@ void initWheel() {
     flappyIcon.setSize(120, 120);
 }
 
-void initColorBox() {
-    //background.setBorder(black);
-   //background.setColor(white);
+void initColoringBook() {
+    /* Draw Background */
     background.setCenter((width / 2) + 25, (height / 2));
     background.setSize(460, 480);
 
+    /* Draw Dog */
     // Background
     dog.push_back(make_unique<Quad>(background));
-
     // Tail
     dog.push_back(make_unique<Oval>(white, black, bkgWidth + 110, bkgHeight + 150, 10, 45));
     // Torso
@@ -122,17 +110,15 @@ void initColorBox() {
     dog.push_back(make_unique<Circle>(white, bkgWidth + 100, bkgHeight + 10, 35));
     dog.push_back(make_unique<Circle>(white, bkgWidth - 70, bkgHeight + 205, 35));
     dog.push_back(make_unique<Circle>(white, bkgWidth + 70, bkgHeight + 205, 35));
-
     // Head
     dog.push_back(make_unique<Circle>(white, bkgWidth, bkgHeight - 130, 85));
     // Eyes
     dog.push_back(make_unique<Circle>(white, bkgWidth - 30, bkgHeight - 150, 10));
     dog.push_back(make_unique<Circle>(white, bkgWidth + 30, bkgHeight - 150, 10));
-
     // Nose
     dog.push_back(make_unique<Oval>(white, black, bkgWidth, bkgHeight - 120, 20, 10));
 
-    // Init color boxes
+    // Create color boxes
     colorBoxes.push_back(Quad(red, 35, 65));
     colorBoxes.push_back(Quad(orange, 35, 125));
     colorBoxes.push_back(Quad(yellow, 35, 185));
@@ -142,21 +128,22 @@ void initColorBox() {
     colorBoxes.push_back(Quad(black, 35, 425));
     colorBoxes.push_back(Quad(white, 35, 485));
 
-    recep.setRadius(35);
-    recep.setColor(white);
-    recep.setCenter(30 + (width / 2), height /2);
-
-
-    ov.setColor(white);
-    ov.setBorder(black);
-    ov.setRadiusX(20);
-    ov.setRadiusY(60);
-    ov.setCenter(width/2, height/2);
-
-
+    /* User */
+    user.setColor(red);
+    user.setBorder(red);
+    user.setRadius(6);
 }
-/* Pong */
-void initPongBars() {
+
+void initPongBall() {
+    /* Ball */
+    ball.setColor(white);
+    ball.setCenter((width / 2), (height / 2));
+    ball.setRadius(8);
+    ball.setVelocity(rand() % 2 == 0 ? 1 : -1, rand() % 2 == 0 ? 1 : -1);
+}
+
+void initPong() {
+    /* Bars */
     leftBar.setCenter(20, (height / 2));
     rightBar.setCenter((width - 20), (height / 2));
     leftBar.setColor(white);
@@ -164,36 +151,31 @@ void initPongBars() {
     leftBar.setSize(10, 70);
     rightBar.setSize(10, 70);
 
+    /* Scores */
     leftScore = 0;
     rightScore = 0;
-}
-void initPongBall() {
-    ball.setColor(white);
-    ball.setCenter((width / 2), (height / 2));
-    ball.setRadius(8);
-    ball.setVelocity(rand() % 2 == 0 ? 1 : -1, rand() % 2 == 0 ? 1 : -1);
+
+    initPongBall();
 }
 
-void initPlayers() {
-    user.setColor(red);
-    user.setBorder(red);
-    user.setRadius(6);
-}
 void initFlappyBird() {
 
+    /* Clouds */
     clouds.push_back(Cloud(white, white, 315, 100, 100));
-    clouds.push_back(Cloud(white, white,  115, 80, 80));
+    clouds.push_back(Cloud(white, white, 115, 80, 80));
     clouds.push_back(Cloud(white, white, 465, 50, 60));
 
+    /* Grass */
     grass.setColor(grassGreen);
     grass.setWidth(width);
-    grass.setHeight(height/2);
-    grass.setCenter(width/2, height);
+    grass.setHeight(height / 2);
+    grass.setCenter(width / 2, height);
 
+    /* Poles */
     int poleTotal = width + 100;
     int x = width - 100;
 
-    for (const color &c : poleColors) {
+    for (const color &c: poleColors) {
         int h = rand() % 300 + 100;
         topPoles.push_back(Quad(c, black, x, 0, 100, h));
         bottomPoles.push_back(Quad(c, black, x, height, 100, poleTotal - h));
@@ -201,31 +183,30 @@ void initFlappyBird() {
         x += 250;
     }
 
-    bird.setCenter(100, height/2);
-    bird.setColor(purple);
+    /* Bird */
+    bird.setCenter(100, height / 2);
+    bird.setColor(steelBlue);
     bird.setRadius(30);
     bird.setVelocity(0, 0);
 
-
-
-
 }
+
 void init() {
     width = 550;
     height = 550;
     bkgHeight = (height / 2);
     bkgWidth = (width / 2) + 25;
     srand(time(NULL));
-    initWheel();
-    initPlayers();
-    initColorBox();
-    initPongBars();
-    initPongBall();
+    initStartScreen();
+    initPong();
+    initColoringBook();
     initFlappyBird();
 }
+
 void initGL() {
     glClearColor(0.0f, 1.0f, 1.0f, 0.0f);
 }
+
 void drawFromFile(string filename, int x, int y, int pencilSize, color c1, color c2) {
     ifstream inFile("../" + filename);
     inFile >> noskipws;
@@ -255,6 +236,7 @@ void drawFromFile(string filename, int x, int y, int pencilSize, color c1, color
     }
     inFile.close();
 }
+
 void fall(int val) {
     bird.setYVelocity(0.81);
     bird.move(bird.getXVelocity(), bird.getYVelocity());
@@ -270,64 +252,42 @@ void fall(int val) {
 
 }
 void jump(int val) {
-
     bird.setYVelocity(-15);
     bird.move(bird.getXVelocity(), bird.getYVelocity());
 
-
-
-
-    /*
-    chrono::high_resolution_clock clock;
-    chrono::time_point<chrono::high_resolution_clock> last, now;
-    last = clock.now();
-    now = clock.now();
-    chrono::duration<double> time = chrono::duration_cast<chrono::duration<double>>(now - last);
-    last = now;
-
-    bird.setYVelocity(10);
-    //bird.getCenterY() += bird.getYVelocity() * time.count();
-    bird.move(bird.getXVelocity(), bird.getYVelocity() * time.count());*/
-
     glutPostRedisplay();
 }
+
 void moveBall(int val) {
     ball.move(ball.getXVelocity(), ball.getYVelocity());
     // Ball hits top
     if (ball.getTopY() < (ball.getRadius() * 2)) {
         ball.bounceY();
-
-        //ball.setCenterY(ball.getRadius());
     }
+
     // Ball hits bottom
     else if (ball.getBottomY() > height) {
         ball.bounceY();
-        //ball.setCenterY(height - ball.getRadius());
-
     }
     else if (ball.getLeftX() < (ball.getRadius() * 2)) {
-        //ball.bounceX();
         initPongBall();
-        //ball.setCenter(250, 250);
+
         ++rightScore;
         if (rightScore == 2) {
             drawFromFile("winner.txt", width - SCORE_POS_X, height - SCORE_POS_Y, 2, white, seaGreen);
             leftScore = 0;
             rightScore = 0;
         }
-        //ball.setCenterX(ball.getRadius());
     }
     else if (ball.getRightX() > width) {
         initPongBall();
-        //ball.setCenter(250, 250);
-        //ball.bounceX();
+
         ++leftScore;
         if (leftScore == 2) {
             drawFromFile("winner.txt", SCORE_POS_X, height - SCORE_POS_X, 2, white, seaGreen);
             leftScore = 0;
             rightScore = 0;
         }
-        //ball.setCenterX(width - ball.getRadius());
     }
     if (ball.isColliding(leftBar) || ball.isColliding(rightBar)) {
         ball.bounceX();
@@ -365,7 +325,7 @@ void display() {
     /* Draw here */
     int x = 0;
     switch(screen) {
-        case WHEEL :
+        case START_SCREEN :
 
             glClearColor(dustyRose.red, dustyRose.green, dustyRose.blue, dustyRose.alpha);
             drawFromFile("welcome.txt", 20, 50, 10, white, dustyRose);
@@ -427,28 +387,7 @@ void display() {
 
             user.draw();
             break;
-        /*case FLAPPY_START :
-            glClearColor(skyBlue.red, skyBlue.green, skyBlue.blue, skyBlue.alpha);
 
-            grass.draw();
-
-            for (Cloud &c : clouds) {
-                c.draw();
-            }
-
-            for (Quad &t : topPoles) {
-                t.draw();
-            }
-            for (Quad &b : bottomPoles) {
-                b.draw();
-            }
-
-            start.draw();
-
-            drawFromFile("start.txt", width/2, height/2, 5, white, dustyRose);
-
-            wheel.draw();
-            break;*/
         case FLAPPY_BIRD :
 
             glClearColor(skyBlue.red, skyBlue.green, skyBlue.blue, skyBlue.alpha);
@@ -527,7 +466,7 @@ void mouse(int button, int state, int x, int y) {
                     reverse(dog.begin(), dog.end());
                 }
 
-                if (screen == WHEEL) {
+                if (screen == START_SCREEN) {
                     if (wheel.isOverlapping(pongIcon)) {
                         screen = PONG;
                     }
@@ -582,7 +521,7 @@ void kbdS(int key, int x, int y) {
             screen = FLAPPY_BIRD;
             break;
         case GLUT_KEY_LEFT :
-            screen = WHEEL;
+            screen = START_SCREEN;
             break;
         case GLUT_KEY_DOWN :
             if (rightBar.getBottomY() != height) {
