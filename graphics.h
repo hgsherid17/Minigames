@@ -22,7 +22,9 @@ using namespace std;
 enum Game {
     WHEEL,
     PONG,
+    //FLAPPY_START,
     FLAPPY_BIRD,
+    FAIL,
     COLORING_BOOK
 };
 

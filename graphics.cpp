@@ -55,6 +55,7 @@ vector<Quad> topPoles;
 vector<Quad> bottomPoles;
 Circle bird;
 bool jumping = false;
+Quad start;
 
 Quad grass;
 
@@ -77,7 +78,7 @@ const color seaGreen(0.137255, 0.556863, 0.419608, 1);
 const color dustyRose(0.52, 0.39, 0.39, 1);
 const color steelBlue(0.560784, 0.560784, 0.737255, 1);
 
-const vector<color> poleColors = {dustyRose, steelBlue, seaGreen};
+const vector<color> poleColors = {purple, blue, dustyRose};
 vector<color> wedgeColors = {red, orange, yellow, green, blue, purple};
 
 int wd;
@@ -179,6 +180,7 @@ void initPlayers() {
     user.setRadius(6);
 }
 void initFlappyBird() {
+
     clouds.push_back(Cloud(white, white, 315, 100, 100));
     clouds.push_back(Cloud(white, white,  115, 80, 80));
     clouds.push_back(Cloud(white, white, 465, 50, 60));
@@ -189,14 +191,14 @@ void initFlappyBird() {
     grass.setCenter(width/2, height);
 
     int poleTotal = width + 100;
-    int x = 100;
+    int x = width - 100;
 
     for (const color &c : poleColors) {
         int h = rand() % 300 + 100;
         topPoles.push_back(Quad(c, black, x, 0, 100, h));
         bottomPoles.push_back(Quad(c, black, x, height, 100, poleTotal - h));
 
-        x += 200;
+        x += 250;
     }
 
     bird.setCenter(100, height/2);
@@ -254,24 +256,26 @@ void drawFromFile(string filename, int x, int y, int pencilSize, color c1, color
     inFile.close();
 }
 void fall(int val) {
-    if (jumping) {
-    }
     bird.setYVelocity(0.81);
     bird.move(bird.getXVelocity(), bird.getYVelocity());
-    jumping = false;
+
+    // Lose if bird goes off screen
+    if (bird.getBottomY() >= height) {
+        screen = FAIL;
+    }
+
     glutPostRedisplay();
+
 
 
 }
 void jump(int val) {
 
-    if (jumping) {
-    }
     bird.setYVelocity(-15);
     bird.move(bird.getXVelocity(), bird.getYVelocity());
 
 
-    jumping = true;
+
 
     /*
     chrono::high_resolution_clock clock;
@@ -358,10 +362,8 @@ void display() {
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // DO NOT CHANGE THIS LINE
 
-    string pongMsg = "2-PLAYER PONG";
-    string coloringMsg = "COLORING BOOK";
-    string flappyMsg = "FLAPPY BIRD";
     /* Draw here */
+    int x = 0;
     switch(screen) {
         case WHEEL :
 
@@ -420,11 +422,35 @@ void display() {
                     s->draw();
                 }
             }
+
             drawFromFile("dog.txt", bkgWidth - 47, bkgHeight - 110, 1, black, dog[9]->getColor());
 
             user.draw();
             break;
+        /*case FLAPPY_START :
+            glClearColor(skyBlue.red, skyBlue.green, skyBlue.blue, skyBlue.alpha);
+
+            grass.draw();
+
+            for (Cloud &c : clouds) {
+                c.draw();
+            }
+
+            for (Quad &t : topPoles) {
+                t.draw();
+            }
+            for (Quad &b : bottomPoles) {
+                b.draw();
+            }
+
+            start.draw();
+
+            drawFromFile("start.txt", width/2, height/2, 5, white, dustyRose);
+
+            wheel.draw();
+            break;*/
         case FLAPPY_BIRD :
+
             glClearColor(skyBlue.red, skyBlue.green, skyBlue.blue, skyBlue.alpha);
 
             grass.draw();
@@ -442,36 +468,66 @@ void display() {
 
             bird.draw();
             fall(0);
+
             break;
 
+        case FAIL :
+            x = width - 100;
+            for (int i = 0; i < topPoles.size(); ++i) {
+                topPoles[i].setCenterX(x);
+                bottomPoles[i].setCenterX(x);
+
+                x += 250;
+            }
+            string play = "Press the right arrow key to play again";
+            string end = "Press the left arrow key to return to menu";
+            glClearColor(skyBlue.red, skyBlue.green, skyBlue.blue, skyBlue.alpha);
+            grass.draw();
+
+            drawFromFile ("start.txt", 100, height/2 - 100, 10, white, skyBlue);
+
+            glRasterPos2i(100, height / 2 + play.length());
+            for (const char &letter : play) {
+                glColor3f(1, 1, 1);
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, letter);
+            }
+
+            glRasterPos2i(100, height / 2 + 100);
+            for (const char &letter : end) {
+                glColor3f(1, 1, 1);
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, letter);
+            }
+            break;
     }
 
     glFlush();
 }
 void mouse(int button, int state, int x, int y) {
-    bool under = true;
 
     switch(state) {
         case GLUT_DOWN :
             break;
         case GLUT_UP :
             if (button == GLUT_LEFT_BUTTON) {
-                for (Quad box : colorBoxes) {
-                    if (user.isOverlapping(box)) {
-                        user.setColor(box.getColor());
-                        user.setBorder(box.getColor());
+                if (screen == COLORING_BOOK) {
+                    for (Quad box : colorBoxes) {
+                        if (user.isOverlapping(box)) {
+                            user.setColor(box.getColor());
+                            user.setBorder(box.getColor());
+                        }
                     }
-                }
-                reverse(dog.begin(), dog.end());
-                for (int i = 0; i < dog.size(); i++) {
-                    if (dog[i]->isOverlapping(user)) {
-                        dog[i]->setColor(user.getColor());
-                        i = dog.size();
-                    }
-                }
-                reverse(dog.begin(), dog.end());
 
-                while (screen == WHEEL) {
+                    reverse(dog.begin(), dog.end());
+                    for (int i = 0; i < dog.size(); i++) {
+                        if (dog[i]->isOverlapping(user)) {
+                            dog[i]->setColor(user.getColor());
+                            i = dog.size();
+                        }
+                    }
+                    reverse(dog.begin(), dog.end());
+                }
+
+                if (screen == WHEEL) {
                     if (wheel.isOverlapping(pongIcon)) {
                         screen = PONG;
                     }
@@ -482,6 +538,7 @@ void mouse(int button, int state, int x, int y) {
                         screen = FLAPPY_BIRD;
                     }
                 }
+
 
             }
             break;
@@ -522,16 +579,10 @@ void kbd(unsigned char key, int x, int y) {
 void kbdS(int key, int x, int y) {
     switch(key) {
         case GLUT_KEY_RIGHT :
-            screen = PONG;
-            spinning = true;
+            screen = FLAPPY_BIRD;
             break;
         case GLUT_KEY_LEFT :
-            if (screen == COLORING_BOOK) {
-                screen = FLAPPY_BIRD;
-            }
-            else {
-                screen = COLORING_BOOK;
-            }
+            screen = WHEEL;
             break;
         case GLUT_KEY_DOWN :
             if (rightBar.getBottomY() != height) {
@@ -558,12 +609,24 @@ void cloudTimer(int dummy) {
 }
 void poleTimer(int dummy) {
     for (int i = 0; i < topPoles.size(); ++i) {
-        topPoles[i].moveLeftAndJumpX(-2, width);
-        bottomPoles[i].moveLeftAndJumpX(-2, width);
+        topPoles[i].moveLeftAndJumpX(-3, width);
+        bottomPoles[i].moveLeftAndJumpX(-3, width);
+
+        if (topPoles[i].getLeftX() >= width) {
+            int h = rand() % 300 + 100;
+            int poleTotal = width + 100;
+            topPoles[i].setHeight(h);
+            bottomPoles[i].setHeight(poleTotal - h);
+        }
+
+        if (bird.isOverlapping(topPoles[i]) || bird.isOverlapping(bottomPoles[i])) {
+            screen = FAIL;
+        }
     }
 
+
     glutPostRedisplay();
-    glutTimerFunc(50, poleTimer, dummy);
+    glutTimerFunc(30, poleTimer, dummy);
 }
 
 int main(int argc, char** argv) {

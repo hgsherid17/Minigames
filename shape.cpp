@@ -208,7 +208,7 @@ void Shape::fall() {
     move(xVelocity, yVelocity);
 }
 bool Shape::isColliding(const Shape &s) {
-    if (s.getTopY() < getTopY() && s.getBottomY() > getBottomY()) {
+    if (s.getTopY() < getTopY() || s.getBottomY() > getBottomY()) {
         if (s.getRightX() == getLeftX()) {
             return true;
         }
