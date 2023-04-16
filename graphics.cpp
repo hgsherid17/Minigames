@@ -17,9 +17,13 @@ using namespace std;
 
 Game screen = WHEEL;
 GLdouble width, height;
-Circle wheel;
 Circle user;
 Oval ov;
+Circle wheel;
+
+Quad pongIcon;
+Quad coloringIcon;
+Quad flappyIcon;
 
 /* Pong */
 Quad leftBar;
@@ -76,14 +80,26 @@ const color oldGold(0.81, 0.71, 0.23, 1);
 const color steelBlue(0.560784, 0.560784, 0.737255, 1);
 
 const vector<color> poleColors = {dustyRose, steelBlue, seaGreen};
-vector<color> wedgeColors = {dustyRose, oldGold, seaGreen, steelBlue};
+vector<color> wedgeColors = {red, orange, yellow, green, blue, purple};
 
 int wd;
 
 void initWheel() {
-    wheel.setCenter((width / 2), (height / 2));
-    wheel.setRadius(200);
-    wheel.setColor(0, 0, 0, 1);
+    int iconHeight = height - 200;
+    wheel.setRadius(10);
+    wheel.setCenter(width/2, height/2);
+
+    pongIcon.setCenter(width - 100, iconHeight);
+    pongIcon.setColor(seaGreen);
+    pongIcon.setSize(120, 120);
+
+    coloringIcon.setCenter(width / 2, iconHeight);
+    coloringIcon.setColor(red);
+    coloringIcon.setSize(120, 120);
+
+    flappyIcon.setCenter(width - (width - 100), iconHeight);
+    flappyIcon.setColor(skyBlue);
+    flappyIcon.setSize(120, 120);
 }
 
 void initColorBox() {
@@ -284,9 +300,6 @@ void moveBall(int val) {
     glutPostRedisplay();
 }
 void spinWheel(int val) {
-    /**
-     * TODO: Pass in target index and slow rotation angle as it reaches target
-     */
     wheel.spin(rotationAngle);
     rotationAngle += 1.0f;
 
@@ -313,14 +326,33 @@ void display() {
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // DO NOT CHANGE THIS LINE
 
+    string pongMsg = "2-PLAYER PONG";
+    string coloringMsg = "COLORING BOOK";
+    string flappyMsg = "FLAPPY BIRD";
     /* Draw here */
     switch(screen) {
         case WHEEL :
+
+            glClearColor(dustyRose.red, dustyRose.green, dustyRose.blue, dustyRose.alpha);
+            drawFromFile("welcome.txt", 20, 50, 10, white, dustyRose);
+
+            pongIcon.draw();
+            drawFromFile("pong.txt",  width - (pongIcon.getCenterX() /2) + 75,  (height - (pongIcon.getCenterY() / 2)) - 40, 5, white, seaGreen);
+
+            flappyIcon.draw();
+            drawFromFile("flappy.txt",  (flappyIcon.getCenterX() /2) - 9,  height - (flappyIcon.getCenterY() / 2) - 50, 4, white, skyBlue);
+
+            coloringIcon.draw();
+            drawFromFile("color.txt",  (coloringIcon.getCenterX() /2) + 85,  height - (coloringIcon.getCenterY() / 2) - 35 , 4, white, red);
+
+
             glPushMatrix();
+
             glTranslatef(wheel.getCenterX(), wheel.getCenterY(), 0.0f);
             spinWheel(0);
             glTranslatef(-(wheel.getCenterX()), -(wheel.getCenterY()), 0.0f);
             wheel.drawWedges(12, wedgeColors);
+
             glPopMatrix();
 
             break;
@@ -405,6 +437,19 @@ void mouse(int button, int state, int x, int y) {
                     }
                 }
                 reverse(dog.begin(), dog.end());
+
+                while (screen == WHEEL) {
+                    if (wheel.isOverlapping(pongIcon)) {
+                        screen = PONG;
+                    }
+                    else if (wheel.isOverlapping(coloringIcon)) {
+                        screen = COLORING_BOOK;
+                    }
+                    else if (wheel.isOverlapping(flappyIcon)) {
+                        screen = FLAPPY_BIRD;
+                    }
+                }
+
             }
             break;
     }
@@ -412,6 +457,7 @@ void mouse(int button, int state, int x, int y) {
 }
 void cursor(int x, int y) {
     user.setCenter(x, y);
+    wheel.setCenter(x, y);
 
     glutPostRedisplay();
 }
