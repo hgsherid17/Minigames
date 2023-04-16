@@ -90,6 +90,8 @@ public:
     void moveY(double y);
     void bounceX();
     void bounceY();
+    void jump();
+    void fall();
 
     bool isColliding(const Shape &s);
     virtual void draw() const = 0;

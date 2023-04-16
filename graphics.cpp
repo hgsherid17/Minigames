@@ -11,6 +11,8 @@
 #include <string>
 #include <fstream>
 #include <memory>
+#include <unistd.h>
+
 
 using namespace std;
 // Theres a lot going on. my apologies
@@ -51,10 +53,10 @@ vector<Oval> petals;
 vector<Cloud> clouds;
 vector<Quad> topPoles;
 vector<Quad> bottomPoles;
-Quad bird;
+Circle bird;
+bool jumping = false;
 
 Quad grass;
-
 
 float rotationAngle = 0.0f;
 
@@ -71,12 +73,8 @@ const color purple(0.5, 0, 1, 1);
 
 const color skyBlue(77/255.0, 213/255.0, 240/255.0);
 const color grassGreen(26/255.0, 176/255.0, 56/255.0);
-
 const color seaGreen(0.137255, 0.556863, 0.419608, 1);
-
-
 const color dustyRose(0.52, 0.39, 0.39, 1);
-const color oldGold(0.81, 0.71, 0.23, 1);
 const color steelBlue(0.560784, 0.560784, 0.737255, 1);
 
 const vector<color> poleColors = {dustyRose, steelBlue, seaGreen};
@@ -203,7 +201,8 @@ void initFlappyBird() {
 
     bird.setCenter(100, height/2);
     bird.setColor(purple);
-    bird.setSize(50, 50);
+    bird.setRadius(30);
+    bird.setVelocity(0, 0);
 
 
 
@@ -254,7 +253,40 @@ void drawFromFile(string filename, int x, int y, int pencilSize, color c1, color
     }
     inFile.close();
 }
+void fall(int val) {
+    if (jumping) {
+    }
+    bird.setYVelocity(0.81);
+    bird.move(bird.getXVelocity(), bird.getYVelocity());
+    jumping = false;
+    glutPostRedisplay();
 
+
+}
+void jump(int val) {
+
+    if (jumping) {
+    }
+    bird.setYVelocity(-15);
+    bird.move(bird.getXVelocity(), bird.getYVelocity());
+
+
+    jumping = true;
+
+    /*
+    chrono::high_resolution_clock clock;
+    chrono::time_point<chrono::high_resolution_clock> last, now;
+    last = clock.now();
+    now = clock.now();
+    chrono::duration<double> time = chrono::duration_cast<chrono::duration<double>>(now - last);
+    last = now;
+
+    bird.setYVelocity(10);
+    //bird.getCenterY() += bird.getYVelocity() * time.count();
+    bird.move(bird.getXVelocity(), bird.getYVelocity() * time.count());*/
+
+    glutPostRedisplay();
+}
 void moveBall(int val) {
     ball.move(ball.getXVelocity(), ball.getYVelocity());
     // Ball hits top
@@ -409,6 +441,7 @@ void display() {
             }
 
             bird.draw();
+            fall(0);
             break;
 
     }
@@ -478,10 +511,11 @@ void kbd(unsigned char key, int x, int y) {
         }
     }
     if (key == 32) {
-        bird.moveY(-(height * 0.1));
+        jump(0);
+       // bird.moveY(-(height * 0.1));
     }
     else {
-        bird.moveY(height * 0.05);
+        //bird.moveY(height * 0.05);
     }
     glutPostRedisplay();
 }
@@ -550,7 +584,8 @@ int main(int argc, char** argv) {
     glutDisplayFunc(display);
     glutTimerFunc(25, spinWheel, 0);
     glutTimerFunc(25, moveBall, 0);
-
+    glutTimerFunc(25, fall, 0);
+    glutTimerFunc(25, jump, 0);
 
 
     // Our own OpenGL initialization
