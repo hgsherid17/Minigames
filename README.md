@@ -18,6 +18,9 @@ Flappy Bird: The user controls a "bird", jumping to avoid obstacles. If the play
 
 ### Known Bugs:
 * No winner message is displayed after a pong player wins
+* Flappy Bird animation is choppy
+* Flappy Bird jumping is choppy
+
 
 ### Future Expansions:
 * Count player's score in flappy bird
@@ -27,7 +30,7 @@ Flappy Bird: The user controls a "bird", jumping to avoid obstacles. If the play
 * Improve visuals
 
 ### Expected grade: 80
-Explaination
+I believe 
 
 ### Citations:
 
