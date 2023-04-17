@@ -181,32 +181,7 @@ void Shape::bounceX() {
 void Shape::bounceY() {
     yVelocity *= -1;
 }
-void Shape::jump() {
-    chrono::high_resolution_clock clock;
-    chrono::time_point<chrono::high_resolution_clock> last, now;
-    last = clock.now();
-    now = clock.now();
-    chrono::duration<double> time = chrono::duration_cast<chrono::duration<double>>(now - last);
 
-    yVelocity += (-9.81) * time.count();
-    center.y += yVelocity * time.count();
-    move(xVelocity, yVelocity);
-
-
-
-}
-void Shape::fall() {
-    chrono::high_resolution_clock clock;
-    chrono::time_point<chrono::high_resolution_clock> last, now;
-    last = clock.now();
-    now = clock.now();
-    chrono::duration<double> time = chrono::duration_cast<chrono::duration<double>>(now - last);
-
-
-    yVelocity += (-9.81) * time.count();
-    center.y += yVelocity * time.count();
-    move(xVelocity, yVelocity);
-}
 bool Shape::isColliding(const Shape &s) {
     if (s.getTopY() < getTopY() || s.getBottomY() > getBottomY()) {
         if (s.getRightX() == getLeftX()) {

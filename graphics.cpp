@@ -12,6 +12,7 @@
 #include <fstream>
 #include <memory>
 #include <unistd.h>
+#include <thread>
 
 
 using namespace std;
@@ -48,6 +49,7 @@ vector<Quad> topPoles;
 vector<Quad> bottomPoles;
 Circle bird;
 Quad grass;
+bool jumping = true;
 
 
 float rotationAngle = 0.0f;
@@ -139,7 +141,7 @@ void initPongBall() {
     ball.setColor(white);
     ball.setCenter((width / 2), (height / 2));
     ball.setRadius(8);
-    ball.setVelocity(rand() % 2 == 0 ? 1 : -1, rand() % 2 == 0 ? 1 : -1);
+    ball.setVelocity(rand() % 2 == 0 ? 2 : -2, rand() % 2 == 0 ? 2 : -2);
 }
 
 void initPong() {
@@ -239,23 +241,24 @@ void drawFromFile(string filename, int x, int y, int pencilSize, color c1, color
 
 void fall(int val) {
     bird.setYVelocity(0.81);
+
     bird.move(bird.getXVelocity(), bird.getYVelocity());
 
     // Lose if bird goes off screen
-    if (bird.getBottomY() >= height) {
+    if (screen == FLAPPY_BIRD && bird.getBottomY() >= height) {
         screen = FAIL;
     }
 
     glutPostRedisplay();
 
 
-
 }
 void jump(int val) {
-    bird.setYVelocity(-15);
-    bird.move(bird.getXVelocity(), bird.getYVelocity());
+    bird.setYVelocity(-25);
+    bird.move(0, bird.getYVelocity());
 
     glutPostRedisplay();
+
 }
 
 void moveBall(int val) {
@@ -273,23 +276,23 @@ void moveBall(int val) {
         initPongBall();
 
         ++rightScore;
-        if (rightScore == 2) {
-            drawFromFile("winner.txt", width - SCORE_POS_X, height - SCORE_POS_Y, 2, white, seaGreen);
+        if (rightScore > 5) {
+            //drawFromFile("winner.txt", width - SCORE_POS_X, height - SCORE_POS_Y, 2, white, seaGreen);
             leftScore = 0;
             rightScore = 0;
+
         }
     }
     else if (ball.getRightX() > width) {
         initPongBall();
 
         ++leftScore;
-        if (leftScore == 2) {
-            drawFromFile("winner.txt", SCORE_POS_X, height - SCORE_POS_X, 2, white, seaGreen);
+        if (leftScore > 5) {
             leftScore = 0;
             rightScore = 0;
         }
     }
-    if (ball.isColliding(leftBar) || ball.isColliding(rightBar)) {
+    else if (ball.isOverlapping(leftBar) || ball.isOverlapping(rightBar)) {
         ball.bounceX();
     }
 
@@ -406,7 +409,10 @@ void display() {
             }
 
             bird.draw();
+
+
             fall(0);
+
 
             break;
 
@@ -423,7 +429,7 @@ void display() {
             glClearColor(skyBlue.red, skyBlue.green, skyBlue.blue, skyBlue.alpha);
             grass.draw();
 
-            drawFromFile ("start.txt", 100, height/2 - 100, 10, white, skyBlue);
+            drawFromFile("start.txt", 100, height/2 - 100, 10, white, skyBlue);
 
             glRasterPos2i(100, height / 2 + play.length());
             for (const char &letter : play) {
@@ -508,10 +514,6 @@ void kbd(unsigned char key, int x, int y) {
     }
     if (key == 32) {
         jump(0);
-       // bird.moveY(-(height * 0.1));
-    }
-    else {
-        //bird.moveY(height * 0.05);
     }
     glutPostRedisplay();
 }
@@ -558,7 +560,7 @@ void poleTimer(int dummy) {
             bottomPoles[i].setHeight(poleTotal - h);
         }
 
-        if (bird.isOverlapping(topPoles[i]) || bird.isOverlapping(bottomPoles[i])) {
+        if (screen == FLAPPY_BIRD && (bird.isOverlapping(topPoles[i]) || bird.isOverlapping(bottomPoles[i]))) {
             screen = FAIL;
         }
     }
