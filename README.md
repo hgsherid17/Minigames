@@ -30,7 +30,8 @@ Flappy Bird: The user controls a "bird", jumping to avoid obstacles. If the play
 * Improve visuals
 
 ### Expected grade: 80
-I believe 
+I believe my program is sufficiently complex for an Open-Ended Project. I used multiple concepts from Module 4, including the use of OpenGL timer and 
+keyboard functions. My program is organized and has comments, and I began making my Module 4 program a week before the due date.
 
 ### Citations:
 
