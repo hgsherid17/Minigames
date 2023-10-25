@@ -1,4 +1,4 @@
-# Hannah Sheridan - Open-Ended Project
+# Hannah Sheridan - Minigames
 This program is a collection of minigames, including Pong, a Coloring Book, and Flappy Bird. The window allows the user to select minigames and switch between them.
 
 Pong: A two-player game in which players pass a ball by bouncing it off of a bar that they control. A player receives a point if the other player does not bounce the ball back.
