@@ -7,7 +7,7 @@ Coloring Book: Includes a set of colors that the user can click to change the co
 
 Flappy Bird: The user controls a "bird", jumping to avoid obstacles. If the player hits an obstacle, the game ends. 
 
-### Module 4 Concepts Used:
+### Concepts Used:
 * OpenGL
 * GLUT
 * Drawing 
@@ -21,7 +21,6 @@ Flappy Bird: The user controls a "bird", jumping to avoid obstacles. If the play
 * Flappy Bird animation is choppy
 * Flappy Bird jumping is choppy
 
-
 ### Future Expansions:
 * Count player's score in flappy bird
 * Add more drawings to the coloring book
@@ -29,9 +28,5 @@ Flappy Bird: The user controls a "bird", jumping to avoid obstacles. If the play
 * Create more minigames
 * Improve visuals
 
-### Expected grade: 80
-I believe my program is sufficiently complex for an Open-Ended Project. I used multiple concepts from Module 4, including the use of OpenGL timer and 
-keyboard functions. My program is organized and has comments, and I began making my Module 4 program a week before the due date.
-
-### Citations:
+### Citations: N/A
 
