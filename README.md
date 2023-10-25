@@ -22,8 +22,12 @@ Flappy Bird: The user controls a "bird", jumping to avoid obstacles. If the play
 * Flappy Bird jumping is choppy
 
 ### Future Expansions:
-* Count player's score in flappy bird
-* Add more drawings to the coloring book
+* Improve ball movement in Pong
+* Count player's score in Flappy Bird
+* Add more drawings to the Coloring Book
+* Make user interface more intuitive
+    * Button to switch between minigames
+    * Button to exit window / return to menu
 * Add music and sound effects
 * Create more minigames
 * Improve visuals
